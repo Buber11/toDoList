@@ -1,314 +1,339 @@
 :root{
 
-    /* box shadow */
-    --box-shadow-blue: 0px 0px 20px rgba(0, 191, 255, 0.3);
-    --box-shadow-black: 0px 0px 10px rgba(0, 0, 0 , 0.3);
+  /* box shadow */
+  --box-shadow-blue: 0px 0px 20px rgba(0, 191, 255, 0.3);
+  --box-shadow-black: 0px 0px 10px rgba(0, 0, 0 , 0.3);
+  --box-shadow-red: 0px 0px 20px #dc3545;
+
+  /* transition */
+  --box-shadow-transition: box-shadow 0.3s ease;
+  --border-colour-transition: border-color 0.3s ease;
+  --width-transition: width 0.5s ease;
+
+  /*colour setting etc*/
+  --radius-px: 20px;
+  --blue-border-colour: #007bff;
+  --margine-px: 20px;
+  --padding-fewer: 15px;
+  --padding-more:20px;
+
+}
+@keyframes expand {
+  from {
+    width: 150px; 
+  }
+  to {
+    width: 100%; 
+  }
+}
+
+@keyframes shrink {
+  from {
+    width: 100%; 
+  }
+  to {
+    width: 150px; 
+  }
+}
+@keyframes shrinkInput {
+  from {
+    width: 300px;
+  }
+  to {
+    width: 150px; 
+  }
+}
+@keyframes expandInput {
+  from {
+    width: 150px; 
+  }
+  to {
+    width: 300px; 
+  }
+}
+@keyframes shrinkSelect {
+  from {
+    width: 300px;
+  }
+  to {
+    width: 100px; 
+  }
+}
+@keyframes expandSelect {
+  from {
+    width: 100px; 
+  }
+  to {
+    width: 300px; 
+  }
+}
+
+.completed {
+  text-decoration: line-through; 
+  color: #999;
+}
+
+button {
+  border-radius: var(--radius-px);
+  border-color: var(--blue-border-colour);
+  color: black;
+  padding: 15px;
+  cursor: pointer;
+  transition: var(--box-shadow-transition);
+}
+button:hover {
+  box-shadow: var(--box-shadow-blue)
+}
+
+input {
+  border-radius: var(--radius-px);
+  background-color: transparent;
+  padding: 15px;
+  transition: var(--width-transition), var(--border-colour-transition), var(--box-shadow-transition);
+}
+
+input:hover {
+  border-color: var(--blue-border-colour);
+  box-shadow: var(--box-shadow)
+}
+
+input:focus {
+  animation: expandInput 0.5s forwards;
+  border-color: var(--blue-border-colour);
+}
+
+input:not(:focus) {
+  animation: shrinkInput 0.5s forwards;
+}
+
+.container {
+  margin-left: 20%;
+  margin-top: 3%;
+  margin-bottom: 20%;
+  margin-right: 20%;
+  display: grid;
+  justify-content: center;
+  border-radius: var(--radius-px);
+}
+
+.settings {
+  background-color: #f5f5f5; 
+  width: 600px;
+  border-radius: var(--radius-px);
+  padding: var(--padding-more);
+  margin-bottom: var(--margine-px);
+  margin-top: var(--margine-px);
+  transition: var(--box-shadow-transition);
+}
+.settings:hover {
+  box-shadow: var(--box-shadow-black);
+}
+
+.buttonsMenu{
+  display: flex;
+  gap: 20px;
+}
+.menu {
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--margine-px);
+}
+.taskInput{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.list {
+  padding: var(--padding-more);
+  width: 600px;
+  background-color: #f5f5f5; 
+  border-radius: var(--radius-px);
+  margin-bottom: var(--margine-px);
+  transition: var(--box-shadow-transition);
+}
+.list:hover {
+  box-shadow: var(--box-shadow-black);
+}
+
+.task {
+  margin: 0;
+}
+
+.listPosition {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: var(--radius-px);
+  background-color: transparent;
+  padding: 10px;
+  margin-bottom: 5px;
+  margin-left: -40px;
+}
+.listPosition:hover {
+  border: solid 1px white;
+  transition: var(--border-colour-transition), var(--box-shadow-transition);
+  border-color: var(--blue-border-colour);
+  box-shadow: var(--box-shadow-blue);
+}
+
+.removeTaskButton {
+  background-color: transparent;
+  align-self: flex-end;
+  color: black;
+  border: solid 2px;
+  border-color: #dc3545;
+  transition: var(--border-colour-transition), background-color 1s ease;
+}
+.removeTaskButton:hover {
+  background-color: #dc3545;
   
-    /* transition */
-    --box-shadow-transition: box-shadow 0.3s ease;
-    --border-colour-transition: border-color 0.3s ease;
-    --width-transition: width 0.5s ease;
-  
-    /*colour setting etc*/
-    --radius-px: 20px;
-    --blue-border-colour: #007bff;
-    --margine-px: 20px;
-    --padding-fewer: 15px;
-    --padding-more:20px;
-  
-  }
-  @keyframes expand {
-    from {
-      width: 150px; 
-    }
-    to {
-      width: 100%; 
-    }
-  }
-  
-  @keyframes shrink {
-    from {
-      width: 100%; 
-    }
-    to {
-      width: 150px; 
-    }
-  }
-  @keyframes shrinkInput {
-    from {
-      width: 300px;
-    }
-    to {
-      width: 150px; 
-    }
-  }
-  @keyframes expandInput {
-    from {
-      width: 150px; 
-    }
-    to {
-      width: 300px; 
-    }
-  }
-  @keyframes shrinkSelect {
-    from {
-      width: 300px;
-    }
-    to {
-      width: 100px; 
-    }
-  }
-  @keyframes expandSelect {
-    from {
-      width: 100px; 
-    }
-    to {
-      width: 300px; 
-    }
-  }
-  
-  .completed {
-    text-decoration: line-through; 
-    color: #999;
-  }
-  
-  button {
-    border-radius: var(--radius-px);
-    border-color: var(--blue-border-colour);
-    color: black;
-    padding: 15px;
-    transition: var(--box-shadow-transition);
-  }
-  button:hover {
-    box-shadow: var(--box-shadow-blue)
-  }
-  
-  input {
-    border-radius: var(--radius-px);
-    background-color: transparent;
-    padding: 15px;
-    transition: var(--width-transition), var(--border-colour-transition), var(--box-shadow-transition);
-  }
-  
-  input:hover {
-    border-color: var(--blue-border-colour);
-    box-shadow: var(--box-shadow)
-  }
-  
-  input:focus {
-    animation: expandInput 0.5s forwards;
-    border-color: var(--blue-border-colour);
-  }
-  
-  input:not(:focus) {
-    animation: shrinkInput 0.5s forwards;
-  }
-  
-  .container {
-    margin-left: 20%;
-    margin-top: 3%;
-    margin-bottom: 20%;
-    margin-right: 20%;
-    display: grid;
-    justify-content: center;
-    border-radius: var(--radius-px);
-  }
-  
-  .settings {
-    background-color: #f5f5f5; 
-    width: 600px;
-    border-radius: var(--radius-px);
-    padding: var(--padding-more);
-    margin-bottom: var(--margine-px);
-    margin-top: var(--margine-px);
-    transition: var(--box-shadow-transition);
-  }
-  .settings:hover {
-    box-shadow: var(--box-shadow-black);
-  }
-  
-  .menu {
-    background-color: transparent;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: var(--margine-px);
-  }
-  
-  .list {
-    padding: var(--padding-more);
-    width: 600px;
-    background-color: #f5f5f5; 
-    border-radius: var(--radius-px);
-    margin-bottom: var(--margine-px);
-    transition: var(--box-shadow-transition);
-  }
-  .list:hover {
-    box-shadow: var(--box-shadow-black);
-  }
-  
-  .task {
-    margin: 0;
-  }
-  
-  .listPosition {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: var(--radius-px);
-    background-color: transparent;
-    padding: 10px;
-    margin-bottom: 5px;
-    margin-left: -40px;
-  }
-  .listPosition:hover {
-    border: solid 1px white;
-    transition: var(--border-colour-transition), var(--box-shadow-transition);
-    border-color: var(--blue-border-colour);
-    box-shadow: var(--box-shadow-blue);
-  }
-  
-  .removeButton {
-    background-color: transparent;
-    align-self: flex-end;
-    color: black;
-    border: solid 2px;
-    border-color: #dc3545;
-    transition: var(--border-colour-transition), var(--box-shadow-transition);
-  }
-  .removeButton:hover {
-    transform: scale(1.1);
-    box-shadow: 0px 0px 20px #dc3545;
-  }
-  
-  .input-with-button {
-    display: flex;
-    align-items: center;
-    margin-bottom: var(--margine-px);
-  }
-  .input-with-button input.ListName {
-    padding: 10px;
-    border: 1px solid beige;
-    border-radius: var(--radius-px);
-    background-color: transparent;
-    text-align: center;
-    font-size: 18px;
-    flex: 1; 
-  }
-  .input-with-button input.ListName:hover {
-    transition: var(--border-colour-transition);
-    border-color: var(--blue-border-colour);
-  }
-  .input-with-button button {
-    padding: 10px 20px;
-    background-color: var(--blue-border-colour);
-    color: white;
-    border: none;
-    border-radius: var(--radius-px);
-    cursor: pointer;
-    margin-left: 10px; 
-  }
-  .input-with-button button:hover {
-    transform: scale(1.1); 
-  }
-  
-  select {
-    width: 100px;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid beige;
-    border-radius: var(--radius-px);
-    background-color: transparent;
-    transition: var(--width-transition), var(--border-colour-transition), var(--box-shadow-transition);
-  }
-  select:hover {
-    box-shadow: var(--box-shadow-blue);
-    border-color: var(--blue-border-colour);
-  }
-  select:focus {
-    outline: none;
-    animation: expandSelect 0.5s forwards;
-  }
-  select:not(:focus) {
-    animation: shrinkSelect 0.5s forwards;
-  }
-  
-  .listToChoose {
-    grid: flex;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
-  }
-  
-  .browser {
-    display: flex;
-    border-radius: var(--radius-px);
-    background-color: transparent;
-    border: 1px solid black;
-    width: 150px;
-    margin-bottom: var(--margine-px);
-    margin-left: -35px;
-    transition: var(--width-transition);
-  }
-  .browser:hover {
-    transform: scale(1.05);
-    transition: var(--border-colour-transition);
-    border-color: var(--blue-border-colour);
-  }
-  .browser:focus {
-    background-color: #ccc;
-    transition: background-color 0.3s ease;
-    animation: expand 0.5s forwards;
-  }
-  .browser:not(:focus) {
-    background-color: transparent;
-    transition: background-color 2s ease;
-    animation: shrink 0.5s forwards;
-  }
-  
-  #modal-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-  }
-  
-  #modal {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: var(--padding-more);
-    border-radius: 5px;
-    box-shadow: var(--box-shadow-black);
-    z-index: 1001;
-  }
-  
-  #modal-content {
-    text-align: center;
-  }
-  
-  #modal-content button {
-    margin: 10px;
-    padding: 8px 20px;
-    border: none;
-    background-color: var(--blue-border-colour);
-    color: white;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  #cancel-delete {
-    background-color: #dc3545;
-  }
-  
-  .hidden {
-    display: none;
-  }
+}
+
+.input-with-button {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--margine-px);
+}
+.input-with-button input.ListName {
+  padding: 10px;
+  border: 1px solid beige;
+  border-radius: var(--radius-px);
+  background-color: transparent;
+  text-align: center;
+  font-size: 18px;
+  flex: 1; 
+}
+.input-with-button input.ListName:hover {
+  transition: var(--border-colour-transition);
+  border-color: var(--blue-border-colour);
+}
+.hideListButton{
+  padding: 10px 20px;
+  color: black;
+  border-color: var(--blue-border-colour);
+  background-color: transparent;
+  border-radius: var(--radius-px);
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background-color 2s ease ; 
+}
+.hideListButton:hover {
+  background-color: var(--blue-border-colour);
+}
+
+.removeListButton{
+  padding: 10px 20px;
+  background-color: transparent;
+  border-color: #dc3545;
+  color: black;
+  border-radius: var(--radius-px);
+  margin-left: 10px;
+
+  transition: background-color 2s ease
+}
+.removeListButton:hover{
+  background-color: #dc3545;
+}
+
+select {
+  width: 100px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid beige;
+  border-radius: var(--radius-px);
+  background-color: transparent;
+  transition: var(--width-transition), var(--border-colour-transition), var(--box-shadow-transition);
+}
+select:hover {
+  box-shadow: var(--box-shadow-blue);
+  border-color: var(--blue-border-colour);
+}
+select:focus {
+  outline: none;
+  animation: expandSelect 0.5s forwards;
+}
+select:not(:focus) {
+  animation: shrinkSelect 0.5s forwards;
+}
+
+.listToChoose {
+  grid: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 30px;
+}
+
+.browser {
+  display: flex;
+  border-radius: var(--radius-px);
+  background-color: transparent;
+  border: 1px solid black;
+  width: 150px;
+  margin-bottom: var(--margine-px);
+  margin-left: -35px;
+  transition: var(--width-transition);
+}
+.browser:hover {
+  transform: scale(1.05);
+  transition: var(--border-colour-transition);
+  border-color: var(--blue-border-colour);
+}
+.browser:focus {
+  background-color: #ccc;
+  transition: background-color 0.3s ease;
+  animation: expand 0.5s forwards;
+}
+.browser:not(:focus) {
+  background-color: transparent;
+  transition: background-color 2s ease;
+  animation: shrink 0.5s forwards;
+}
+
+#modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+#modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: var(--padding-more);
+  border-radius: 5px;
+  box-shadow: var(--box-shadow-black);
+  z-index: 1001;
+}
+
+#modal-content {
+  text-align: center;
+}
+
+#modal-content button {
+  margin: 10px;
+  padding: 8px 20px;
+  border: none;
+  background-color: var(--blue-border-colour);
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+#cancel-delete {
+  background-color: #dc3545;
+}
+
+.hidden {
+  display: none;
+}
