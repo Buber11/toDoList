@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+
+    <article id="container" class="container">
+        <div class="settings">
+            <article class="menu">
+
+                <div class="taskInput">
+                    <label>task: </label>
+                    <input type="text" id="input">
+                </div>
+
+                <div class="buttonsMenu">
+                    <button id="inputButton" class="addTask" onclick="save()" >save</button>
+                    <button id="newList" onclick="addNewList()" >new list</button>   
+                </div> 
+
+            </article>
+            <div class="listToChoose">
+                <label for="select">Wybierz liste</label>
+                <select id="select" name="select">
+                </select>
+            </div>
+        </div>
+
+    </article>
+
+       
+
+        <!-- Tło modalu -->
+        <div id="modal-overlay"></div>
+
+        <div id="modal">
+            <div id="modal-content">
+              <p id="modal-text"></p>
+              <button id="confirm-delete">confirm</button>
+              <button id="cancel-delete">cancel</button>
+            </div>
+        </div>
+
+    <script src="./index.js"></script>
+</body>
+</html>
