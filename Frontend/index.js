@@ -24,6 +24,8 @@ class List {
         this.browser = document.createElement('input');
 
         this.listDiv = document.createElement("div");
+
+        this.complitedTaskList;
         
     }
 
@@ -91,12 +93,23 @@ class List {
         this.inputWithButton.appendChild(this.hideListButton);
         this.inputWithButton.appendChild(this.removeListButton);
 
-
         this.listTaskContainer.appendChild(this.browser);
 
         this.listDiv.classList.add("list");
         this.listDiv.appendChild(this.inputWithButton);
         this.listDiv.appendChild(this.listTaskContainer);
+
+    }
+
+    addComplitedTaskList(list){
+
+        list.removeListButton.remove();
+        list.inputListName.value = "Complited Task";
+        list.inputListName.disabled = true;
+        this.complitedTaskList = list;
+        this.listDiv.appendChild(list.inputWithButton);
+        this.listDiv.appendChild(list.listTaskContainer);
+
     }
 
     addNewTask(task){
@@ -106,10 +119,24 @@ class List {
 
     }
 
+    completeTask(task){
+        const indexOftask = this.taskList.indexOf(task);
+        this.taskList.splice(indexOftask,1);
+
+        if(this.complitedTaskList == null){
+            const complitedTaskList = new List();
+            complitedTaskList.createNewList();
+            this.addComplitedTaskList(complitedTaskList);
+        }
+        
+        this.complitedTaskList.addNewTask(task);
+    }
+
     removeTask(task){
         const indexOftask = this.taskList.indexOf(task);
         this.taskList.splice(indexOftask,1);
     }
+
 }
 
 class Task{
@@ -123,24 +150,37 @@ class Task{
 
     createNewTask(taskContentText){
         this.listElement.classList.add("listPosition");
-
+        
         this.taskContent.classList.add("task");
         this.taskContent.innerText = taskContentText;
-
+    
+        this.taskContent.addEventListener('click', this.complete.bind(this));
+    
         this.removeTaskButton.innerText = "X"; 
         this.removeTaskButton.classList.add("removeTaskButton");
-        this.removeTaskButton.addEventListener('click', () => {
-            openModal(this,this.taskContent.textContent);
-        });
+        this.removeTaskButton.addEventListener('click', () => openModal(this, this.taskContent.textContent));
+    
         this.listElement.appendChild(this.taskContent); 
         this.listElement.appendChild(this.removeTaskButton);
     }
-
+    
     remove(){
-        this.list.removeTask(this);
         this.listElement.remove();
+        this.list.removeTask(this);
     }
-
+    
+    complete(){
+        this.list.completeTask(this);
+        this.taskContent.removeEventListener('click', this.complete); 
+        this.taskContent.addEventListener('click', this.inComplete.bind(this)); 
+    }
+    
+    inComplete(){
+        this.taskContent.removeEventListener('click', this.inComplete); 
+        this.list.addNewTask(this);
+        this.taskContent.addEventListener('click', this.complete.bind(this));
+    }
+    
 }
 
 const  openModal = (task, taskContent) => {
