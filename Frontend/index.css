@@ -2,7 +2,7 @@
 
   /* box shadow */
   --box-shadow-blue: 0px 0px 20px rgba(0, 191, 255, 0.3);
-  --box-shadow-black: 0px 0px 10px rgba(0, 0, 0 , 0.3);
+  --box-shadow-menu-and-list: 0px 0px 10px rgba(0, 0, 0 , 0.3);
   --box-shadow-red: 0px 0px 20px #dc3545;
 
   /* transition */
@@ -17,7 +17,20 @@
   --padding-fewer: 15px;
   --padding-more:20px;
 
+  --background-body-color: white;
+  --backgriund-settings-color: #f5f5f5; 
+  --background-buttons-color: transparent;
+  --text-color: black;
+  --background-listPosition-color: white;
+  --background-list-color: #f5f5f5; 
+  --text-broweser-focus: black;
+
 }
+
+body{
+  background-color: var(--background-body-color);
+}
+
 @keyframes expand {
   from {
     width: 150px; 
@@ -68,6 +81,10 @@
   }
 }
 
+label{
+  color: var(--text-color);
+}
+
 .completed {
   text-decoration: line-through; 
   color: #999;
@@ -76,10 +93,11 @@
 button {
   border-radius: var(--radius-px);
   border-color: var(--blue-border-colour);
-  color: black;
+  color: var(--text-color);
   padding: 15px;
   cursor: pointer;
   transition: var(--box-shadow-transition);
+  background-color: var(--background-buttons-color);
 }
 button:hover {
   box-shadow: var(--box-shadow-blue)
@@ -90,6 +108,7 @@ input {
   background-color: transparent;
   padding: 15px;
   transition: var(--width-transition), var(--border-colour-transition), var(--box-shadow-transition);
+  color: var(--text-color);
 }
 
 input:hover {
@@ -117,7 +136,7 @@ input:not(:focus) {
 }
 
 .settings {
-  background-color: #f5f5f5; 
+  background-color: var(--backgriund-settings-color); 
   width: 600px;
   border-radius: var(--radius-px);
   padding: var(--padding-more);
@@ -126,7 +145,7 @@ input:not(:focus) {
   transition: var(--box-shadow-transition);
 }
 .settings:hover {
-  box-shadow: var(--box-shadow-black);
+  box-shadow: var(--box-shadow-menu-and-list);
 }
 
 .buttonsMenu{
@@ -149,13 +168,13 @@ input:not(:focus) {
 .list {
   padding: var(--padding-more);
   width: 600px;
-  background-color: #f5f5f5; 
+  background-color: var(--background-list-color);
   border-radius: var(--radius-px);
   margin-bottom: var(--margine-px);
   transition: var(--box-shadow-transition);
 }
 .list:hover {
-  box-shadow: var(--box-shadow-black);
+  box-shadow: var(--box-shadow-menu-and-list);
 }
 
 .task {
@@ -167,22 +186,23 @@ input:not(:focus) {
   justify-content: space-between;
   align-items: center;
   border-radius: var(--radius-px);
-  background-color: transparent;
+  border: 1px solid var(--blue-border-colour);
+  background-color: var(--background-listPosition-color);
+  color: var(--text-color);
   padding: 10px;
   margin-bottom: 5px;
   margin-left: -40px;
 }
 .listPosition:hover {
   border: solid 1px white;
-  transition: var(--border-colour-transition), var(--box-shadow-transition);
-  border-color: var(--blue-border-colour);
+  transition: var(--box-shadow-transition);
   box-shadow: var(--box-shadow-blue);
 }
 
 .removeTaskButton {
   background-color: transparent;
   align-self: flex-end;
-  color: black;
+  color: var(--text-color);
   border: solid 2px;
   border-color: #dc3545;
   transition: var(--border-colour-transition), background-color 1s ease;
@@ -202,6 +222,7 @@ input:not(:focus) {
   border: 1px solid beige;
   border-radius: var(--radius-px);
   background-color: transparent;
+  color: var(--text-color);
   text-align: center;
   font-size: 18px;
   flex: 1; 
@@ -212,7 +233,7 @@ input:not(:focus) {
 }
 .hideListButton{
   padding: 10px 20px;
-  color: black;
+  color: var(--text-color);
   border-color: var(--blue-border-colour);
   background-color: transparent;
   border-radius: var(--radius-px);
@@ -228,7 +249,7 @@ input:not(:focus) {
   padding: 10px 20px;
   background-color: transparent;
   border-color: #dc3545;
-  color: black;
+  color: var(--text-color);
   border-radius: var(--radius-px);
   margin-left: 10px;
 
@@ -245,6 +266,7 @@ select {
   border: 1px solid beige;
   border-radius: var(--radius-px);
   background-color: transparent;
+  color: var(--text-color);
   transition: var(--width-transition), var(--border-colour-transition), var(--box-shadow-transition);
 }
 select:hover {
@@ -275,6 +297,7 @@ select:not(:focus) {
   margin-bottom: var(--margine-px);
   margin-left: -35px;
   transition: var(--width-transition);
+  color: var(--text-color);
 }
 .browser:hover {
   transform: scale(1.05);
@@ -285,11 +308,13 @@ select:not(:focus) {
   background-color: #ccc;
   transition: background-color 0.3s ease;
   animation: expand 0.5s forwards;
+  color: var(--text-broweser-focus);
 }
 .browser:not(:focus) {
   background-color: transparent;
   transition: background-color 2s ease;
   animation: shrink 0.5s forwards;
+  
 }
 
 #modal-overlay {
@@ -309,10 +334,10 @@ select:not(:focus) {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: var(--background-body-color);
   padding: var(--padding-more);
   border-radius: 5px;
-  box-shadow: var(--box-shadow-black);
+  box-shadow: var(--box-shadow-menu-and-list);
   z-index: 1001;
 }
 
@@ -325,7 +350,7 @@ select:not(:focus) {
   padding: 8px 20px;
   border: none;
   background-color: var(--blue-border-colour);
-  color: white;
+  color: var(--text-color);
   border-radius: 3px;
   cursor: pointer;
 }
@@ -337,3 +362,18 @@ select:not(:focus) {
 .hidden {
   display: none;
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-body-color: #1a1a1a; 
+    --backgriund-settings-color: #333333; 
+    --text-color: #cccccc; 
+    --background-listPosition-color: #1a1a1a; 
+    --background-list-color: #2d2d2d; 
+    --text-broweser-focus: black;
+    --blue-border-colour: #004b87;
+    --box-shadow-menu-and-list:  0px 0px 10px white;
+  }
+}
+
+
