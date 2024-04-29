@@ -95,6 +95,7 @@ class List {
         this.listDiv.classList.add("list");
         this.listDiv.appendChild(this.inputWithButton);
         this.listDiv.appendChild(this.listTaskContainer);
+        this.listDiv.classList.add('fade-in');
 
     }
 
@@ -236,9 +237,15 @@ const  openModalToRemoveList = (list, listTitle) => {
     modalText.innerText = "Are you sure to remove list: " + listTitle + "?";
 
     confirmDeleteButton.addEventListener('click', function() {
-        list.option.remove();
-        allList.splice(allList.indexOf(this),1);
-        list.listDiv.remove();
+        list.listDiv.classList.remove('fade-in');
+        list.listDiv.classList.add('fade-out');
+
+        setTimeout(function() {
+            list.option.remove();
+            allList.splice(allList.indexOf(this),1);
+            list.listDiv.remove();
+        }, 1000);
+
         closeModal();
     });
   
