@@ -25,7 +25,7 @@ class List {
 
         this.listDiv = document.createElement("div");
 
-        this.complitedTaskList;
+        this.completedTaskList;
         
     }
 
@@ -101,14 +101,26 @@ class List {
 
     }
 
-    addComplitedTaskList(list){
+    addCompletedTaskList(list){
 
         list.removeListButton.remove();
         list.inputListName.value = "Complited Task";
         list.inputListName.disabled = true;
-        this.complitedTaskList = list;
+        this.completedTaskList = list;
         this.listDiv.appendChild(list.inputWithButton);
         this.listDiv.appendChild(list.listTaskContainer);
+
+    }
+
+    backUpTaskToList(task){
+        this.addNewTask(task);
+        console.log(this.completedTaskList.listTaskContainer.childElementCount)
+        
+        // broweser is 1 element
+        if(this.completedTaskList.listTaskContainer.childElementCount === 1){
+            this.completedTaskList.inputWithButton.classList.add('hidden');
+            this.completedTaskList.listTaskContainer.classList.add('hidden');
+        }
 
     }
 
@@ -123,19 +135,23 @@ class List {
         const indexOftask = this.taskList.indexOf(task);
         this.taskList.splice(indexOftask,1);
 
-        if(this.complitedTaskList == null){
+        if(this.completedTaskList == null){
             const complitedTaskList = new List();
             complitedTaskList.createNewList();
-            this.addComplitedTaskList(complitedTaskList);
+            this.addCompletedTaskList(complitedTaskList);
+        }else{
+            this.completedTaskList.inputWithButton.classList.remove('hidden');
+            this.completedTaskList.listTaskContainer.classList.remove('hidden');
         }
         
-        this.complitedTaskList.addNewTask(task);
+        this.completedTaskList.addNewTask(task);
     }
 
     removeTask(task){
         const indexOftask = this.taskList.indexOf(task);
         this.taskList.splice(indexOftask,1);
     }
+
 
 }
 
@@ -177,7 +193,7 @@ class Task{
     
     inComplete(){
         this.taskContent.removeEventListener('click', this.inComplete); 
-        this.list.addNewTask(this);
+        this.list.backUpTaskToList(this);
         this.taskContent.addEventListener('click', this.complete.bind(this));
     }
     
