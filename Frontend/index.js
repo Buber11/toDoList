@@ -64,10 +64,7 @@ class List {
 
         //implementation of removing list
         this.removeListButton.addEventListener('click', () => {
-            lastRemovedList = this;
-            this.option.remove();
-            allList.splice(allList.indexOf(this),1);
-            this.listDiv.remove();
+            openModalToRemoveList(this,this.inputListName.value);
         });
 
         this.listTaskContainer.classList.add('listContent');
@@ -174,7 +171,7 @@ class Task{
     
         this.removeTaskButton.innerText = "X"; 
         this.removeTaskButton.classList.add("removeTaskButton");
-        this.removeTaskButton.addEventListener('click', () => openModal(this, this.taskContent.textContent));
+        this.removeTaskButton.addEventListener('click', () => openModalToRemoveTask(this, this.taskContent.textContent));
     
         this.listElement.appendChild(this.taskContent); 
         this.listElement.appendChild(this.removeTaskButton);
@@ -199,7 +196,7 @@ class Task{
     
 }
 
-const  openModal = (task, taskContent) => {
+const  openModalToRemoveTask = (task, taskContent) => {
     const modalOverlay = document.getElementById('modal-overlay');
     const modal = document.getElementById('modal');
     const confirmDeleteButton = document.getElementById('confirm-delete');
@@ -226,6 +223,34 @@ const  openModal = (task, taskContent) => {
     }
 }
 
+const  openModalToRemoveList = (list, listTitle) => {
+    const modalOverlay = document.getElementById('modal-overlay');
+    const modal = document.getElementById('modal');
+    const confirmDeleteButton = document.getElementById('confirm-delete');
+    const cancelDeleteButton = document.getElementById('cancel-delete');
+    const modalText = document.getElementById("modal-text");
+
+    modalOverlay.style.display = 'block';
+    modal.style.display = 'block';
+    
+    modalText.innerText = "Are you sure to remove list: " + listTitle + "?";
+
+    confirmDeleteButton.addEventListener('click', function() {
+        list.option.remove();
+        allList.splice(allList.indexOf(this),1);
+        list.listDiv.remove();
+        closeModal();
+    });
+  
+    cancelDeleteButton.addEventListener('click', function() {
+      closeModal();
+    });
+  
+    function closeModal() {
+      modalOverlay.style.display = 'none';
+      modal.style.display = 'none';
+    }
+}
 const input = document.getElementById('input');
 
 
