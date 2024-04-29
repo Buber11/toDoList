@@ -173,7 +173,7 @@ const  openModal = (task, taskContent) => {
 const input = document.getElementById('input');
 
 
-const save = () => {
+const add = () => {
     const value = input.value;
     if (value.trim() !== '') { 
         const list = allList.find( list => list.option.textContent === select.value );
