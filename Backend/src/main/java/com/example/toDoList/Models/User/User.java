@@ -1,4 +1,4 @@
-package com.example.toDoList.Entities;
+package com.example.toDoList.Models.User;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -86,6 +86,50 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public static Builder builder() {
+        return new User().new Builder();
+    }
+
+
+    public class Builder {
+
+        private Builder() {}
+
+        public Builder userId(long userId) {
+            User.this.userId = userId;
+            return this;
+        }
+
+        public Builder name(String name) {
+            User.this.name = name;
+            return this;
+        }
+
+        public Builder surname(String surname) {
+            User.this.surname = surname;
+            return this;
+        }
+
+        public Builder email(String email) {
+            User.this.email = email;
+            return this;
+        }
+
+        public Builder password(String password) {
+            User.this.password = password;
+            return this;
+        }
+
+        public Builder enabled(boolean enabled) {
+            User.this.enabled = enabled;
+            return this;
+        }
+
+        public User build() {
+            return User.this;
+        }
     }
 }
 

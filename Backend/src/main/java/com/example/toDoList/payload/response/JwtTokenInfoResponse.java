@@ -1,6 +1,6 @@
-package com.example.toDoList.DTO.UserDTO;
+package com.example.toDoList.payload.response;
 
-public class LoginResponse {
+public class JwtTokenInfoResponse {
     private String token;
 
     private long expiresIn;
@@ -9,7 +9,7 @@ public class LoginResponse {
         return token;
     }
 
-    public LoginResponse setToken(String theToken) {
+    public JwtTokenInfoResponse setToken(String theToken) {
         token = theToken;
         return this;
     }
@@ -18,10 +18,10 @@ public class LoginResponse {
         return expiresIn;
     }
 
-    public LoginResponse setExpiresIn(long theExpiresIn) {
+    public JwtTokenInfoResponse setExpiresIn(long theExpiresIn) {
         expiresIn = theExpiresIn;
         return this;
     }
 
-    // Getters and setters...
+
 }

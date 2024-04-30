@@ -1,4 +1,4 @@
-package com.example.toDoList.Fasada.commands;
+package com.example.toDoList.Fasada;
 
 
 public interface Command<T,U> {

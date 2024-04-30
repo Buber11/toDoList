@@ -1,6 +1,7 @@
 package com.example.toDoList.Fasada;
 
-import com.example.toDoList.Service.AuthenticationServiceImpl;
+import com.example.toDoList.Auth.AuthenticationServiceImpl;
+import com.example.toDoList.Fasada.Fasada;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

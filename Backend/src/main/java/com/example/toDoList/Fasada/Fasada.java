@@ -1,9 +1,12 @@
 package com.example.toDoList.Fasada;
 
-import com.example.toDoList.DTO.UserDTO.SignUPAnswerDto;
-import com.example.toDoList.Fasada.commands.CreateNewUserCommand;
-import com.example.toDoList.Service.AuthenticationService;
-import com.example.toDoList.Service.UserServiceImpl;
+
+import com.example.toDoList.Auth.AuthenticationService;
+import com.example.toDoList.Auth.commands.LoginUserCommand;
+import com.example.toDoList.payload.response.JwtTokenInfoResponse;
+import com.example.toDoList.payload.response.UserInfoResponse;
+import com.example.toDoList.Auth.commands.SignUpUserCommand;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -13,7 +16,7 @@ import org.springframework.context.annotation.Lazy;
 
 public class Fasada {
 
-    private UserServiceImpl userService;
+//    private UserUpdateDataServiceImpl userService;
 
     private final AuthenticationService authenticationService;
 
@@ -21,14 +24,22 @@ public class Fasada {
         authenticationService = theAuthenticationService;
     }
 
-    public SignUPAnswerDto handle(CreateNewUserCommand command){
+    public UserInfoResponse handle(SignUpUserCommand command){
         return command.execute(authenticationService);
     }
 
-    @Autowired
-    @Lazy
-    public void setUserService(UserServiceImpl userService) {
-        this.userService = userService;
+    public JwtTokenInfoResponse handle(LoginUserCommand command){
+        return command.execute(authenticationService);
     }
+
+//    public Boolean handle(DeleteUserCommand command){
+//        return command.execute(userService);
+//    }
+//
+//    @Autowired
+//    @Lazy
+//    public void setUserService(UserUpdateDataServiceImpl userService) {
+//        this.userService = userService;
+//    }
 
 }

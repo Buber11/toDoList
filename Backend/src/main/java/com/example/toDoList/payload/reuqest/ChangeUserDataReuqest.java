@@ -1,8 +1,8 @@
-package com.example.toDoList.DTO.UserDTO;
+package com.example.toDoList.payload.reuqest;
 
-public record SignUpDTO(
+public record ChangeUserDataReuqest(
         String password,
         String name,
         String surname,
         String email
-) {}
+){ }

@@ -1,6 +1,5 @@
 package com.example.toDoList.Security;
 
-import com.example.toDoList.Service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
