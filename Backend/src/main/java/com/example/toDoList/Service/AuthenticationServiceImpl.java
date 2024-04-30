@@ -40,17 +40,30 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     )
             );
         } catch (AuthenticationException e) {
-            System.out.println("Błąd uwierzytelniania: " + e.getMessage());
+            System.out.println("error authentication " + e.getMessage());
             return null;
         }
         return userRepository.findByEmail(input.getEmail());
     }
     public SignUPAnswerDto signup(SignUpDTO signUpDTO) {
-
+        SignUPAnswerDto addedUserDto;
         User newUser = userMapper.ToUser(signUpDTO);
-        newUser.setPassword(passwordEncoder.encode(signUpDTO.password()));
-        userRepository.save(newUser);
-        SignUPAnswerDto addedUserDto = userMapper.toUserDto(newUser);
+
+        if(userRepository.findByEmail(signUpDTO.email()).isEmpty()) {
+            
+            newUser.setPassword(passwordEncoder.encode(signUpDTO.password()));
+            userRepository.save(newUser);
+            addedUserDto = userMapper.toUserDto(newUser);
+
+            if( ! (addedUserDto.name() == signUpDTO.name()
+                    && addedUserDto.email() == signUpDTO.email()
+                    && addedUserDto.surname() == signUpDTO.surname() ) ){
+                addedUserDto =null;
+            }
+
+        }else {
+            addedUserDto = null;
+        }
 
         return addedUserDto;
     }

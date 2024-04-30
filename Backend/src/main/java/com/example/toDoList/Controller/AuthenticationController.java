@@ -10,6 +10,7 @@ import com.example.toDoList.Fasada.commands.CreateNewUserCommand;
 import com.example.toDoList.Service.JwtService;
 import com.example.toDoList.Service.AuthenticationService;
 import com.example.toDoList.Service.AuthenticationServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,11 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<SignUPAnswerDto> register(@RequestBody SignUpDTO signUpDTO) {
         SignUPAnswerDto createdUserDto = fasada.handle(CreateNewUserCommand.from(signUpDTO));
-        return ResponseEntity.ok(createdUserDto);
+        if(createdUserDto != null) {
+            return ResponseEntity.ok(createdUserDto);
+        }{
+            return ResponseEntity.badRequest().build();
+        }
     }
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
