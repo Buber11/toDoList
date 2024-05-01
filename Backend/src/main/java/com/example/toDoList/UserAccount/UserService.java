@@ -8,6 +8,9 @@ import com.example.toDoList.payload.reuqest.UpdateUserDataReuqest;
 public interface UserService {
 
     Boolean deleteUser(String authorizationHeader, DeleteUserReuqest reuqest);
-    UserUpdateResponse updateUserData(UpdateUserDataReuqest reuqest, String authorizationHeader);
+    UserUpdateResponse updateUserData(UpdateUserDataReuqest reuqest, Long userId);
+
+    UserInfoResponse getInfoAboutUser(Long userId);
+
 
 }

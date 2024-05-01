@@ -5,6 +5,7 @@ import com.example.toDoList.Auth.AuthenticationService;
 import com.example.toDoList.Auth.commands.LoginUserCommand;
 import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.commands.RefreshTokenCommand;
+import com.example.toDoList.UserAccount.Command.GetUserCommand;
 import com.example.toDoList.UserAccount.Command.UpdateUserCommand;
 import com.example.toDoList.UserAccount.Command.UserDeleteCommand;
 import com.example.toDoList.UserAccount.UserService;
@@ -68,6 +69,11 @@ public class Fasada {
         return command.execute(userService);
     }
 
+    public UserInfoResponse handle(
+            GetUserCommand command
+    ){
+        return command.execute(userService);
+    }
 
 
 }

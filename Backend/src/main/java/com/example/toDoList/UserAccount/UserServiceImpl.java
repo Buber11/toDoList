@@ -13,7 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -61,9 +63,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserUpdateResponse updateUserData(UpdateUserDataReuqest reuqest, String authorizationHeader) {
-        String token = jwtService.extractJwtToken(authorizationHeader);
-        Long userId = jwtService.extractIdFromToken(token);
+    public UserUpdateResponse updateUserData(UpdateUserDataReuqest reuqest, Long userId) {
+
         if(userRepository.existsById(userId)){
             User updatedUser = User.builder()
                     .userId(userId)
@@ -85,9 +86,27 @@ public class UserServiceImpl implements UserService{
                     .expiresIn(jwtService.getExpirationTime())
                     .token(jwtService.generateToken(claims,updatedUser))
                     .build();
-            
+
             return response;
 
+        }else {
+            return null;
+        }
+    }
+
+    @Override
+    public UserInfoResponse getInfoAboutUser(Long userId) {
+
+        Optional<User> userToView = userRepository.findById(userId);
+
+        if(! userToView.isEmpty()){
+            User user = userToView.get();
+
+            return UserInfoResponse.builder()
+                    .email(user.getEmail())
+                    .name(user.getName())
+                    .surname(user.getSurname())
+                    .build();
         }else {
             return null;
         }
