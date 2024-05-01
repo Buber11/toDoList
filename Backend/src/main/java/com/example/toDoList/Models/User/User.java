@@ -1,6 +1,9 @@
 package com.example.toDoList.Models.User;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +12,9 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@ToString
 public class User implements UserDetails {
 
     @Id
@@ -56,37 +62,6 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 
     public static Builder builder() {
         return new User().new Builder();

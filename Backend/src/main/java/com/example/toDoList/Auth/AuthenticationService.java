@@ -9,4 +9,6 @@ public interface AuthenticationService {
     JwtTokenInfoResponse authenticate(LoginRequest input);
     UserInfoResponse signup(SignUpReuqest signUpDTO);
 
+    boolean logout(String authorizationHeader);
+
 }

@@ -3,6 +3,7 @@ package com.example.toDoList.Fasada;
 
 import com.example.toDoList.Auth.AuthenticationService;
 import com.example.toDoList.Auth.commands.LoginUserCommand;
+import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.commands.SignUpUserCommand;
@@ -29,6 +30,10 @@ public class Fasada {
     }
 
     public JwtTokenInfoResponse handle(LoginUserCommand command){
+        return command.execute(authenticationService);
+    }
+
+    public boolean handle(LogoutUserCommand command){
         return command.execute(authenticationService);
     }
 

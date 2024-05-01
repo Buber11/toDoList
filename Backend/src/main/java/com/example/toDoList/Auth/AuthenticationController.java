@@ -1,12 +1,15 @@
 package com.example.toDoList.Auth;
 
 import com.example.toDoList.Auth.commands.LoginUserCommand;
+import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.Fasada.Fasada;
 import com.example.toDoList.payload.reuqest.SignUpReuqest;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.reuqest.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.commands.SignUpUserCommand;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,12 +19,10 @@ public class AuthenticationController {
 
 
     private final Fasada fasada;
-    private final AuthenticationService authenticationService;
 
     public AuthenticationController(Fasada fasada,
                                     AuthenticationServiceImpl authenticationService) {
         this.fasada = fasada;
-        this.authenticationService = authenticationService;
     }
 
     @PostMapping("/signup")
@@ -45,4 +46,17 @@ public class AuthenticationController {
             return ResponseEntity.ok(jwtTokenInfoResponse);
         }
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
+        System.out.println(authorizationHeader);
+        boolean response = fasada.handle(LogoutUserCommand.from(authorizationHeader));
+        if (response) {
+            return ResponseEntity.ok("Logout successful");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout failed");
+        }
+
+    }
+
 }

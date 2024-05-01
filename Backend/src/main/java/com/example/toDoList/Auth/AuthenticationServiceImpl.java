@@ -1,5 +1,7 @@
 package com.example.toDoList.Auth;
 
+import com.example.toDoList.Models.Token.Token;
+import com.example.toDoList.Models.Token.TokenRespository;
 import com.example.toDoList.Security.JwtService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.reuqest.SignUpReuqest;
@@ -7,12 +9,16 @@ import com.example.toDoList.payload.reuqest.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Models.User.User;
 import com.example.toDoList.Models.User.JPAUserRepository;
+import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -21,18 +27,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    private final TokenRespository tokenRespository;
+
     private final JwtService jwtService;
 
     public AuthenticationServiceImpl(
             JPAUserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
-            JwtService jwtService
+            JwtService jwtService,
+            TokenRespository tokenRespository
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.tokenRespository = tokenRespository;
     }
 
     public JwtTokenInfoResponse authenticate(LoginRequest input) {
@@ -56,9 +66,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }else{
             return null;
         }
+
     }
     public UserInfoResponse signup(SignUpReuqest signUpDTO) {
-        System.out.println(signUpDTO);
 
         UserInfoResponse addedUserDto;
         User newUser;
@@ -91,5 +101,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         return addedUserDto;
+    }
+
+    @Override
+    public boolean logout(String authorizationHeader) {
+
+        String token = jwtService.extractJwtToken(authorizationHeader);
+        String email = jwtService.extractUsername(token);
+        Date expirationDate = jwtService.extractClaim(token, Claims :: getExpiration);
+        
+        if( ! expirationDate.before(new Date())){
+            Optional<User> userToLogout = userRepository.findByEmail(email);
+
+            if(! userToLogout.isEmpty()){
+                Token blackListToken = Token.builder()
+                        .userId(userToLogout.get().getUserId())
+                        .token(token)
+                        .tokenExpirationDate(expirationDate)
+                        .build();
+
+                tokenRespository.save(blackListToken);
+                SecurityContextHolder.clearContext();
+
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
     }
 }

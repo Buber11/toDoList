@@ -47,6 +47,9 @@ public class JwtService {
     public long getExpirationTime() {
         return jwtExpiration;
     }
+    public String extractJwtToken(String authorizationHeader) {
+        return authorizationHeader.substring("Bearer ".length()).trim();
+    }
 
     private String buildToken(
             Map<String, Object> extraClaims,
