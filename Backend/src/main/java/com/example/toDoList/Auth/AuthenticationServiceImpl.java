@@ -27,9 +27,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
     private final TokenRespository tokenRespository;
-
     private final JwtService jwtService;
 
     public AuthenticationServiceImpl(
@@ -60,22 +58,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         Optional<User> authenticatedUser = userRepository.findByEmail(input.email());
-        if (userRepository.existsByEmail(input.email())){
 
-            HashMap extraClaims = new HashMap();
-            extraClaims.put("userId", authenticatedUser.get().getUserId());
+        HashMap extraClaims = new HashMap();
+        extraClaims.put("userId", authenticatedUser.get().getUserId());
 
-            String jwtToken = jwtService.generateToken(extraClaims,authenticatedUser.get());
-            JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
-                    .token(jwtToken)
-                    .expiresIn(jwtService.getExpirationTime())
-                    .build();
+        String jwtToken = jwtService.generateToken(extraClaims,authenticatedUser.get());
+        JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
+                .token(jwtToken)
+                .expiresIn(jwtService.getExpirationTime())
+                .build();
 
-            return jwtTokenInfoResponse;
-        }else{
-            return null;
-        }
-
+        return jwtTokenInfoResponse;
     }
     public UserInfoResponse signup(SignUpReuqest signUpDTO) {
 
