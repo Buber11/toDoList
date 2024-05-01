@@ -5,12 +5,15 @@ import com.example.toDoList.Auth.AuthenticationService;
 import com.example.toDoList.Auth.commands.LoginUserCommand;
 import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.commands.RefreshTokenCommand;
+import com.example.toDoList.UserAccount.Command.GetUserCommand;
+import com.example.toDoList.UserAccount.Command.UpdateUserCommand;
 import com.example.toDoList.UserAccount.Command.UserDeleteCommand;
 import com.example.toDoList.UserAccount.UserService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.commands.SignUpUserCommand;
 
+import com.example.toDoList.payload.response.UserUpdateResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -60,7 +63,17 @@ public class Fasada {
         return command.execute(userService);
     }
 
+    public UserUpdateResponse handle(
+            UpdateUserCommand command
+    ){
+        return command.execute(userService);
+    }
 
+    public UserInfoResponse handle(
+            GetUserCommand command
+    ){
+        return command.execute(userService);
+    }
 
 
 }
