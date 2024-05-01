@@ -1,6 +1,7 @@
 package com.example.toDoList.Models.User;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,6 +16,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @ToString
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -63,48 +65,5 @@ public class User implements UserDetails {
     }
 
 
-    public static Builder builder() {
-        return new User().new Builder();
-    }
-
-
-    public class Builder {
-
-        private Builder() {}
-
-        public Builder userId(long userId) {
-            User.this.userId = userId;
-            return this;
-        }
-
-        public Builder name(String name) {
-            User.this.name = name;
-            return this;
-        }
-
-        public Builder surname(String surname) {
-            User.this.surname = surname;
-            return this;
-        }
-
-        public Builder email(String email) {
-            User.this.email = email;
-            return this;
-        }
-
-        public Builder password(String password) {
-            User.this.password = password;
-            return this;
-        }
-
-        public Builder enabled(boolean enabled) {
-            User.this.enabled = enabled;
-            return this;
-        }
-
-        public User build() {
-            return User.this;
-        }
-    }
 }
 
