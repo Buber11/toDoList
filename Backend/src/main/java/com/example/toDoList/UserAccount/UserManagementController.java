@@ -1,8 +1,12 @@
 package com.example.toDoList.UserAccount;
 
 import com.example.toDoList.Fasada.Fasada;
+import com.example.toDoList.UserAccount.Command.UpdateUserCommand;
 import com.example.toDoList.UserAccount.Command.UserDeleteCommand;
+import com.example.toDoList.payload.response.UserInfoResponse;
+import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.payload.reuqest.DeleteUserReuqest;
+import com.example.toDoList.payload.reuqest.UpdateUserDataReuqest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +35,22 @@ public class UserManagementController {
         }else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity updateUser(
+            @RequestBody UpdateUserDataReuqest reuqest,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader
+    ){
+
+        UserUpdateResponse response = fasada.handle(UpdateUserCommand.from(reuqest,authorizationHeader));
+
+        if(response != null){
+            return ResponseEntity.ok(response);
+        }else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
     }
 
 
