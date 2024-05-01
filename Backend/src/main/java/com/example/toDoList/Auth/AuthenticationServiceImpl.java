@@ -2,28 +2,29 @@ package com.example.toDoList.Auth;
 
 import com.example.toDoList.Models.Token.Token;
 import com.example.toDoList.Models.Token.TokenRespository;
+import com.example.toDoList.Models.User.User;
 import com.example.toDoList.Security.JwtService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.reuqest.SignUpReuqest;
 import com.example.toDoList.payload.reuqest.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
-import com.example.toDoList.Models.User.User;
-import com.example.toDoList.Models.User.JPAUserRepository;
+
+import com.example.toDoList.Models.User.UserRepository;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private final JPAUserRepository userRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -32,7 +33,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
 
     public AuthenticationServiceImpl(
-            JPAUserRepository userRepository,
+            UserRepository userRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
@@ -60,7 +61,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         Optional<User> authenticatedUser = userRepository.findByEmail(input.email());
         if (userRepository.existsByEmail(input.email())){
-            String jwtToken = jwtService.generateToken(authenticatedUser.get());
+
+            HashMap extraClaims = new HashMap();
+            extraClaims.put("userId", authenticatedUser.get().getUserId());
+
+            String jwtToken = jwtService.generateToken(extraClaims,authenticatedUser.get());
             JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
                     .token(jwtToken)
                     .expiresIn(jwtService.getExpirationTime())
@@ -84,6 +89,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .name(signUpDTO.name())
                     .surname(signUpDTO.surname())
                     .password(passwordEncoder.encode(signUpDTO.password()))
+                    .enabled(true)
                     .build();
 
             userRepository.save(newUser);
@@ -111,7 +117,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public boolean logout(String authorizationHeader) {
 
         String token = jwtService.extractJwtToken(authorizationHeader);
-        String email = jwtService.extractUsername(token);
+        String email = jwtService.extractUsernameFromToken(token);
         Date expirationDate = jwtService.extractClaim(token, Claims :: getExpiration);
 
         if( ! expirationDate.before(new Date())){
@@ -138,14 +144,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtTokenInfoResponse refreshToken(String authorizationHeader) {
+
         String token = jwtService.extractJwtToken(authorizationHeader);
         if(tokenRespository.existsByToken(token)){
             return null;
         } else {
-            String email = jwtService.extractUsername(token);
+            String email = jwtService.extractUsernameFromToken(token);
             Optional<User> authenticatedUser = userRepository.findByEmail(email);
-
             if (userRepository.existsByEmail(email)){
+                System.out.println("weszło do jwt");
                 String jwtToken = jwtService.generateToken(authenticatedUser.get());
                 JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
                         .token(jwtToken)

@@ -3,6 +3,7 @@ package com.example.toDoList.Security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,6 +36,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeHttpRequests(e -> e
                         .requestMatchers("/api/auth/login","/api/auth/signup").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/api/user/management/delete").authenticated()
                         .anyRequest().authenticated()
 
         );
@@ -59,7 +61,7 @@ public class SecurityConfiguration {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET","POST"));
+        configuration.setAllowedMethods(List.of("GET","POST","DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
         configuration.setAllowCredentials(true);
 

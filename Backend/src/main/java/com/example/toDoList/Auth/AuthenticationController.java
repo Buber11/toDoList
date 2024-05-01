@@ -70,9 +70,4 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "nie działa kurwa";
-    }
-
 }

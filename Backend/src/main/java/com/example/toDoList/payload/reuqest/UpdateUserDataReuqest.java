@@ -1,6 +1,6 @@
 package com.example.toDoList.payload.reuqest;
 
-public record ChangeUserDataReuqest(
+public record UpdateUserDataReuqest(
         String password,
         String name,
         String surname,

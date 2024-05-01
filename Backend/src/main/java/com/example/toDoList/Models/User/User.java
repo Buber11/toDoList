@@ -1,10 +1,7 @@
 package com.example.toDoList.Models.User;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -29,6 +26,16 @@ public class User implements UserDetails {
     private String password;
     private boolean enabled = true;
 
+    public User() {
+    }
+    public User(long userId, String name, String surname, String email, String password, boolean enabled) {
+        this.userId = userId;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.password = password;
+        this.enabled = enabled;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

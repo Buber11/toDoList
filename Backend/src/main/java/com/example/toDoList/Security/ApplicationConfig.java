@@ -1,5 +1,5 @@
 package com.example.toDoList.Security;
-import com.example.toDoList.Models.User.JPAUserRepository;
+import com.example.toDoList.Models.User.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,9 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 public class ApplicationConfig {
-    private  JPAUserRepository userRepository;
+    private UserRepository userRepository;
 
-    public ApplicationConfig(JPAUserRepository userRepository) {
+    public ApplicationConfig(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

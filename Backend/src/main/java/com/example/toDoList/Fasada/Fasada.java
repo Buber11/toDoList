@@ -5,6 +5,8 @@ import com.example.toDoList.Auth.AuthenticationService;
 import com.example.toDoList.Auth.commands.LoginUserCommand;
 import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.commands.RefreshTokenCommand;
+import com.example.toDoList.UserAccount.Command.UserDeleteCommand;
+import com.example.toDoList.UserAccount.UserService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.commands.SignUpUserCommand;
@@ -21,9 +23,11 @@ public class Fasada {
 //    private UserUpdateDataServiceImpl userService;
 
     private final AuthenticationService authenticationService;
+    private  UserService userService;
 
-    public Fasada(AuthenticationService theAuthenticationService) {
-        authenticationService = theAuthenticationService;
+    public Fasada(AuthenticationService authenticationService, UserService userService) {
+        this.authenticationService = authenticationService;
+        this.userService = userService;
     }
 
     public UserInfoResponse handle(
@@ -50,14 +54,13 @@ public class Fasada {
         return command.execute(authenticationService);
     }
 
-//    public Boolean handle(DeleteUserCommand command){
-//        return command.execute(userService);
-//    }
-//
-//    @Autowired
-//    @Lazy
-//    public void setUserService(UserUpdateDataServiceImpl userService) {
-//        this.userService = userService;
-//    }
+    public boolean handle(
+            UserDeleteCommand command
+    ){
+        return command.execute(userService);
+    }
+
+
+
 
 }
