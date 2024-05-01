@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface TokenRespository extends JpaRepository<Token,Long> {
 
+    Boolean existsByToken(String token);
+
 }

@@ -61,7 +61,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Optional<User> authenticatedUser = userRepository.findByEmail(input.email());
         if (userRepository.existsByEmail(input.email())){
             String jwtToken = jwtService.generateToken(authenticatedUser.get());
-            JwtTokenInfoResponse jwtTokenInfoResponse = new JwtTokenInfoResponse().setToken(jwtToken).setExpiresIn(jwtService.getExpirationTime());
+            JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
+                    .token(jwtToken)
+                    .expiresIn(jwtService.getExpirationTime())
+                    .build();
+
             return jwtTokenInfoResponse;
         }else{
             return null;
@@ -109,7 +113,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = jwtService.extractJwtToken(authorizationHeader);
         String email = jwtService.extractUsername(token);
         Date expirationDate = jwtService.extractClaim(token, Claims :: getExpiration);
-        
+
         if( ! expirationDate.before(new Date())){
             Optional<User> userToLogout = userRepository.findByEmail(email);
 
@@ -129,6 +133,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
         }else {
             return false;
+        }
+    }
+
+    @Override
+    public JwtTokenInfoResponse refreshToken(String authorizationHeader) {
+        String token = jwtService.extractJwtToken(authorizationHeader);
+        if(tokenRespository.existsByToken(token)){
+            return null;
+        } else {
+            String email = jwtService.extractUsername(token);
+            Optional<User> authenticatedUser = userRepository.findByEmail(email);
+
+            if (userRepository.existsByEmail(email)){
+                String jwtToken = jwtService.generateToken(authenticatedUser.get());
+                JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
+                        .token(jwtToken)
+                        .expiresIn(jwtService.getExpirationTime())
+                        .build();
+                return jwtTokenInfoResponse;
+            }else{
+                return null;
+            }
         }
     }
 }

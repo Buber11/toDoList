@@ -2,6 +2,7 @@ package com.example.toDoList.Auth;
 
 import com.example.toDoList.Auth.commands.LoginUserCommand;
 import com.example.toDoList.Auth.commands.LogoutUserCommand;
+import com.example.toDoList.Auth.commands.RefreshTokenCommand;
 import com.example.toDoList.Fasada.Fasada;
 import com.example.toDoList.payload.reuqest.SignUpReuqest;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
@@ -49,7 +50,7 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     public ResponseEntity logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
-        System.out.println(authorizationHeader);
+
         boolean response = fasada.handle(LogoutUserCommand.from(authorizationHeader));
         if (response) {
             return ResponseEntity.ok("Logout successful");
@@ -57,6 +58,21 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout failed");
         }
 
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<JwtTokenInfoResponse> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
+        JwtTokenInfoResponse jwtTokenInfoResponse = fasada.handle(RefreshTokenCommand.from(authorizationHeader));
+        if(jwtTokenInfoResponse != null){
+            return ResponseEntity.ok(jwtTokenInfoResponse);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+        }
+    }
+
+    @GetMapping("/test")
+    public String test(){
+        return "nie działa kurwa";
     }
 
 }

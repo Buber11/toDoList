@@ -11,4 +11,6 @@ public interface AuthenticationService {
 
     boolean logout(String authorizationHeader);
 
+    JwtTokenInfoResponse refreshToken(String authorizationHeader);
+
 }
