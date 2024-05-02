@@ -1,11 +1,15 @@
 package com.example.toDoList.Models.User;
 
+import com.example.toDoList.Models.Task.Task;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 
 @Entity
@@ -13,29 +17,24 @@ import java.util.Collection;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private long userId;
+    private Long userId;
     private String name;
     private String surname;
     private String email;
     private String password;
     private boolean enabled = true;
 
-    public User() {
-    }
-    public User(long userId, String name, String surname, String email, String password, boolean enabled) {
-        this.userId = userId;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.password = password;
-        this.enabled = enabled;
-    }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Task> taskId = new LinkedList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
