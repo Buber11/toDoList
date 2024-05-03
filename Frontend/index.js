@@ -112,13 +112,8 @@ class List {
 
     backUpTaskToList(task){
         this.addNewTask(task);
-        console.log(this.completedTaskList.listTaskContainer.childElementCount)
-        
-        // broweser is 1 element
-        if(this.completedTaskList.listTaskContainer.childElementCount === 1){
-            this.completedTaskList.inputWithButton.classList.add('hidden');
-            this.completedTaskList.listTaskContainer.classList.add('hidden');
-        }
+    
+        this.hideCompletedTaskList();
 
     }
 
@@ -150,6 +145,14 @@ class List {
         this.taskList.splice(indexOftask,1);
     }
 
+    hideCompletedTaskList(){
+
+        if(this.completedTaskList.listTaskContainer.childElementCount === 1){
+            this.completedTaskList.inputWithButton.classList.add('hidden');
+            this.completedTaskList.listTaskContainer.classList.add('hidden');
+        }
+
+    }
 
 }
 
@@ -181,6 +184,7 @@ class Task{
     remove(){
         this.listElement.remove();
         this.list.removeTask(this);
+        this.list.hideCompletedTaskList();
     }
     
     complete(){
