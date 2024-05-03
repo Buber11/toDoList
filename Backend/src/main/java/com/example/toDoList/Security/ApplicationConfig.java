@@ -54,7 +54,7 @@ public class ApplicationConfig {
         return authProvider;
     }
     @Bean
-    public EncryptionAES encryptionAES(){
-        return new EncryptionAES();
+    public AESCipher encryptionAES(){
+        return new AESCipher();
     }
 }

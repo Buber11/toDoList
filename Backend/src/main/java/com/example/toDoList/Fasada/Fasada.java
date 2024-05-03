@@ -7,7 +7,7 @@ import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.commands.RefreshTokenCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
-import com.example.toDoList.User.UserBusinessLogic.Command.UserDeleteCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.DeleteUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.response.TaskResponse;
@@ -17,6 +17,7 @@ import com.example.toDoList.Auth.commands.SignUpUserCommand;
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.task.BusinessLogic.TaskService;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
+import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
 
 import java.util.List;
@@ -65,7 +66,7 @@ public class Fasada {
     }
 
     public boolean handle(
-            UserDeleteCommand command
+            DeleteUserCommand command
     ){
         return command.execute(userService);
     }
@@ -89,6 +90,11 @@ public class Fasada {
     }
     public TaskResponse handle(
             AddTaskCommand command
+    ){
+        return command.execute(taskService);
+    }
+    public Boolean handle(
+            DeleteTaskCommand command
     ){
         return command.execute(taskService);
     }

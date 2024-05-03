@@ -1,6 +1,6 @@
 package com.example.toDoList.task.BusinessLogic;
 
-import com.example.toDoList.Security.EncryptionAES;
+import com.example.toDoList.Security.AESCipher;
 import com.example.toDoList.User.User;
 import com.example.toDoList.User.UserRepository;
 import com.example.toDoList.payload.response.TaskResponse;
@@ -19,15 +19,15 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl implements TaskService{
     private UserRepository userRepository;
     private TaskRepository taskRepository;
-    private EncryptionAES encryptionAES;
+    private AESCipher aesCipher;
 
     public TaskServiceImpl(UserRepository userRepository,
                            TaskRepository taskRepository,
-                           EncryptionAES encryptionAES
+                           AESCipher aesCipher
     ) {
         this.userRepository = userRepository;
         this.taskRepository = taskRepository;
-        this.encryptionAES = encryptionAES;
+        this.aesCipher = aesCipher;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class TaskServiceImpl implements TaskService{
                     .map( task -> {
                         try {
                             return TaskResponse.builder()
-                                    .taskId(encryptionAES.encrypt(task.getTaskId().toString()))
+                                    .taskId(aesCipher.encrypt(task.getTaskId().toString()))
                                     .titleTask(task.getTitleTask())
                                     .complited(task.getCompleted())
                                     .build();
@@ -70,13 +70,45 @@ public class TaskServiceImpl implements TaskService{
                     .build();
             taskRepository.save(newTask);
 
-            return TaskResponse.builder()
-                    .titleTask(newTask.getTitleTask())
-                    .complited(newTask.getCompleted())
-                    .build();
+            try {
+                return TaskResponse.builder()
+                        .taskId(aesCipher.encrypt(newTask.getTaskId().toString()))
+                        .titleTask(newTask.getTitleTask())
+                        .complited(newTask.getCompleted())
+                        .build();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }else {
             return null;
         }
 
+    }
+
+    @Override
+    public Boolean deleteTask(Long userId, String taskIdEncrypted) {
+        Long taskId;
+
+        try {
+            taskId = Long.decode(aesCipher.decrypt(taskIdEncrypted));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Optional<Task> taskOpt = taskRepository.findById(taskId);
+
+        if(!taskOpt.isEmpty()){
+            Task task = taskOpt.get();
+
+            if(task.getUserId() == userId) {
+
+                taskRepository.delete(task);
+                return true;
+            }
+            else return false;
+
+        }else {
+            return false;
+        }
     }
 }

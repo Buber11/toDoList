@@ -3,7 +3,7 @@ package com.example.toDoList.User.UserBusinessLogic;
 import com.example.toDoList.Fasada.Fasada;
 import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
-import com.example.toDoList.User.UserBusinessLogic.Command.UserDeleteCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.DeleteUserCommand;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.payload.request.DeleteUserRequest;
@@ -30,7 +30,7 @@ public class UserManagementController {
             @RequestBody DeleteUserRequest reuqest
     ){
 
-        Boolean response = fasada.handle(UserDeleteCommand.from(authorizationHeader,reuqest));
+        Boolean response = fasada.handle(DeleteUserCommand.from(authorizationHeader,reuqest));
 
         if(response){
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();

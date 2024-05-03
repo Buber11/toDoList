@@ -4,11 +4,13 @@ import com.example.toDoList.Fasada.Fasada;
 import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.request.TaskRequest;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
+import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriUtils;
 
 import java.util.List;
 
@@ -42,5 +44,14 @@ public class TaskController {
         }
     }
 
-
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteTask(@RequestParam String taskId, HttpServletRequest request){
+        Long userId = (Long) request.getAttribute("id");
+        boolean response = fasada.handle(DeleteTaskCommand.from(userId,taskId));
+        if(response){
+            return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
