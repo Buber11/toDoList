@@ -1,10 +1,11 @@
-package com.example.toDoList.Models.Task;
+package com.example.toDoList.task;
 
-import com.example.toDoList.Models.User.User;
+import com.example.toDoList.User.User;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.Fetch;
 import lombok.*;
 
 import java.util.Date;
@@ -23,15 +24,10 @@ public class Task {
     @Column(name = "task_id")
     private Long taskId;
 
-    @JsonIgnore
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "user")
-    private User user;
-
     @Column(name = "task_title")
     private String titleTask;
 
-    private Boolean complited;
+    private Boolean completed;
 
     @Transient
     private Date TimeStamp;

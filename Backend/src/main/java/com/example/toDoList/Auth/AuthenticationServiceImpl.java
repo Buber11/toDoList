@@ -1,15 +1,15 @@
 package com.example.toDoList.Auth;
 
-import com.example.toDoList.Models.Token.Token;
-import com.example.toDoList.Models.Token.TokenRespository;
-import com.example.toDoList.Models.User.User;
+import com.example.toDoList.Auth.Token.Token;
+import com.example.toDoList.Auth.Token.TokenRespository;
+import com.example.toDoList.User.User;
 import com.example.toDoList.Security.JwtService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.reuqest.SignUpReuqest;
 import com.example.toDoList.payload.reuqest.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
 
-import com.example.toDoList.Models.User.UserRepository;
+import com.example.toDoList.User.UserRepository;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,5 +1,5 @@
 package com.example.toDoList.Security;
-import com.example.toDoList.Models.User.UserRepository;
+import com.example.toDoList.User.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,9 +1,9 @@
-package com.example.toDoList.UserAccount;
+package com.example.toDoList.User.UserBusinessLogic;
 
 import com.example.toDoList.Fasada.Fasada;
-import com.example.toDoList.UserAccount.Command.GetUserCommand;
-import com.example.toDoList.UserAccount.Command.UpdateUserCommand;
-import com.example.toDoList.UserAccount.Command.UserDeleteCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.UserDeleteCommand;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.payload.reuqest.DeleteUserReuqest;
@@ -12,8 +12,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/user/management")

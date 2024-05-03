@@ -1,7 +1,7 @@
-package com.example.toDoList.UserAccount.Command;
+package com.example.toDoList.User.UserBusinessLogic.Command;
 
 import com.example.toDoList.Fasada.Command;
-import com.example.toDoList.UserAccount.UserService;
+import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.payload.reuqest.UpdateUserDataReuqest;
 

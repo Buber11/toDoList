@@ -1,4 +1,4 @@
-package com.example.toDoList.UserAccount;
+package com.example.toDoList.User.UserBusinessLogic;
 
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;

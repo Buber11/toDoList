@@ -1,4 +1,4 @@
-package com.example.toDoList.Models.Token;
+package com.example.toDoList.Auth.Token;
 
 import jakarta.persistence.*;
 import lombok.Builder;
