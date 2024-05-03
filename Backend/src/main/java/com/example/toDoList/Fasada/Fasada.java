@@ -5,17 +5,22 @@ import com.example.toDoList.Auth.AuthenticationService;
 import com.example.toDoList.Auth.commands.LoginUserCommand;
 import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.commands.RefreshTokenCommand;
-import com.example.toDoList.UserAccount.Command.GetUserCommand;
-import com.example.toDoList.UserAccount.Command.UpdateUserCommand;
-import com.example.toDoList.UserAccount.Command.UserDeleteCommand;
-import com.example.toDoList.UserAccount.UserService;
+import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.DeleteUserCommand;
+import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
+import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.commands.SignUpUserCommand;
 
 import com.example.toDoList.payload.response.UserUpdateResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import com.example.toDoList.task.BusinessLogic.TaskService;
+import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
+import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
+import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
+
+import java.util.List;
 
 /*
     all services of entities in one place
@@ -28,9 +33,12 @@ public class Fasada {
     private final AuthenticationService authenticationService;
     private  UserService userService;
 
-    public Fasada(AuthenticationService authenticationService, UserService userService) {
+    private TaskService taskService;
+
+    public Fasada(AuthenticationService authenticationService, UserService userService, TaskService taskService) {
         this.authenticationService = authenticationService;
         this.userService = userService;
+        this.taskService = taskService;
     }
 
     public UserInfoResponse handle(
@@ -58,7 +66,7 @@ public class Fasada {
     }
 
     public boolean handle(
-            UserDeleteCommand command
+            DeleteUserCommand command
     ){
         return command.execute(userService);
     }
@@ -73,6 +81,22 @@ public class Fasada {
             GetUserCommand command
     ){
         return command.execute(userService);
+    }
+
+    public List<TaskResponse> handle(
+            GetTasksCommand command
+    ){
+        return command.execute(taskService);
+    }
+    public TaskResponse handle(
+            AddTaskCommand command
+    ){
+        return command.execute(taskService);
+    }
+    public Boolean handle(
+            DeleteTaskCommand command
+    ){
+        return command.execute(taskService);
     }
 
 

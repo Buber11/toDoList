@@ -1,19 +1,17 @@
-package com.example.toDoList.UserAccount;
+package com.example.toDoList.User.UserBusinessLogic;
 
 import com.example.toDoList.Fasada.Fasada;
-import com.example.toDoList.UserAccount.Command.GetUserCommand;
-import com.example.toDoList.UserAccount.Command.UpdateUserCommand;
-import com.example.toDoList.UserAccount.Command.UserDeleteCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
+import com.example.toDoList.User.UserBusinessLogic.Command.DeleteUserCommand;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;
-import com.example.toDoList.payload.reuqest.DeleteUserReuqest;
-import com.example.toDoList.payload.reuqest.UpdateUserDataReuqest;
+import com.example.toDoList.payload.request.DeleteUserRequest;
+import com.example.toDoList.payload.request.UpdateUserDataRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/user/management")
@@ -29,10 +27,10 @@ public class UserManagementController {
     @DeleteMapping("/delete")
     public ResponseEntity deleteUser(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-            @RequestBody DeleteUserReuqest reuqest
+            @RequestBody DeleteUserRequest reuqest
     ){
 
-        Boolean response = fasada.handle(UserDeleteCommand.from(authorizationHeader,reuqest));
+        Boolean response = fasada.handle(DeleteUserCommand.from(authorizationHeader,reuqest));
 
         if(response){
             return ResponseEntity.status(HttpStatus.ACCEPTED).build();
@@ -43,7 +41,7 @@ public class UserManagementController {
 
     @PutMapping("/update")
     public ResponseEntity updateUser(
-            @RequestBody UpdateUserDataReuqest reuqest,
+            @RequestBody UpdateUserDataRequest reuqest,
             HttpServletRequest request
     ){
         Long userId = (Long) request.getAttribute("id");

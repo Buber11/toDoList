@@ -4,9 +4,9 @@ import com.example.toDoList.Auth.commands.LoginUserCommand;
 import com.example.toDoList.Auth.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.commands.RefreshTokenCommand;
 import com.example.toDoList.Fasada.Fasada;
-import com.example.toDoList.payload.reuqest.SignUpReuqest;
+import com.example.toDoList.payload.request.SignUpRequest;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
-import com.example.toDoList.payload.reuqest.LoginRequest;
+import com.example.toDoList.payload.request.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.commands.SignUpUserCommand;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +27,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserInfoResponse> register(@RequestBody SignUpReuqest signUpDTO) {
+    public ResponseEntity<UserInfoResponse> register(@RequestBody SignUpRequest signUpDTO) {
 
         UserInfoResponse createdUserDto = fasada.handle(SignUpUserCommand.from(signUpDTO));
 

@@ -1,19 +1,18 @@
-package com.example.toDoList.UserAccount;
+package com.example.toDoList.User.UserBusinessLogic;
 
-import com.example.toDoList.Models.User.User;
-import com.example.toDoList.Models.User.UserRepository;
+import com.example.toDoList.User.User;
+import com.example.toDoList.User.UserRepository;
 import com.example.toDoList.Security.JwtService;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;
-import com.example.toDoList.payload.reuqest.DeleteUserReuqest;
-import com.example.toDoList.payload.reuqest.UpdateUserDataReuqest;
+import com.example.toDoList.payload.request.DeleteUserRequest;
+import com.example.toDoList.payload.request.UpdateUserDataRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -39,7 +38,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Boolean deleteUser(String authorizationHeader, DeleteUserReuqest reuqest) {
+    public Boolean deleteUser(String authorizationHeader, DeleteUserRequest reuqest) {
         String token = jwtService.extractJwtToken(authorizationHeader);
         String email = jwtService.extractUsernameFromToken(token);
 
@@ -63,7 +62,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserUpdateResponse updateUserData(UpdateUserDataReuqest reuqest, Long userId) {
+    public UserUpdateResponse updateUserData(UpdateUserDataRequest reuqest, Long userId) {
 
         if(userRepository.existsById(userId)){
             User updatedUser = User.builder()
@@ -101,7 +100,7 @@ public class UserServiceImpl implements UserService{
 
         if(! userToView.isEmpty()){
             User user = userToView.get();
-
+            System.out.println(user);
             return UserInfoResponse.builder()
                     .email(user.getEmail())
                     .name(user.getName())

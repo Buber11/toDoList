@@ -3,7 +3,7 @@ package com.example.toDoList.Auth.commands;
 import com.example.toDoList.Auth.AuthenticationService;
 import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
-import com.example.toDoList.payload.reuqest.LoginRequest;
+import com.example.toDoList.payload.request.LoginRequest;
 
 public class LoginUserCommand implements Command<JwtTokenInfoResponse, AuthenticationService> {
 
