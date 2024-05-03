@@ -5,8 +5,8 @@ import com.example.toDoList.Auth.Token.TokenRespository;
 import com.example.toDoList.User.User;
 import com.example.toDoList.Security.JwtService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
-import com.example.toDoList.payload.reuqest.SignUpReuqest;
-import com.example.toDoList.payload.reuqest.LoginRequest;
+import com.example.toDoList.payload.request.SignUpRequest;
+import com.example.toDoList.payload.request.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
 
 import com.example.toDoList.User.UserRepository;
@@ -77,7 +77,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
     }
-    public UserInfoResponse signup(SignUpReuqest signUpDTO) {
+    public UserInfoResponse signup(SignUpRequest signUpDTO) {
 
         UserInfoResponse addedUserDto;
         User newUser;

@@ -2,13 +2,13 @@ package com.example.toDoList.task.BusinessLogic;
 
 import com.example.toDoList.Fasada.Fasada;
 import com.example.toDoList.payload.response.TaskResponse;
+import com.example.toDoList.payload.request.TaskRequest;
+import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class TaskController {
         this.fasada = fasada;
     }
 
-    @GetMapping("/getAllTasks")
+    @GetMapping("/getAll")
     public ResponseEntity getAllTaskForUser(HttpServletRequest request){
         Long userId = (Long) request.getAttribute("id");
         List<TaskResponse> tasks = fasada.handle(GetTasksCommand.from(userId));
@@ -31,4 +31,16 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PostMapping("/add")
+    public ResponseEntity addNewTask(HttpServletRequest request, @RequestBody TaskRequest taskRequest){
+        Long userId = (Long) request.getAttribute("id");
+        TaskResponse response = fasada.handle(AddTaskCommand.from(userId, taskRequest));
+        if(response != null){
+            return ResponseEntity.ok(response);
+        }else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
 }

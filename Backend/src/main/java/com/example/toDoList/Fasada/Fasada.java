@@ -16,6 +16,7 @@ import com.example.toDoList.Auth.commands.SignUpUserCommand;
 
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.task.BusinessLogic.TaskService;
+import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
 
 import java.util.List;
@@ -83,6 +84,11 @@ public class Fasada {
 
     public List<TaskResponse> handle(
             GetTasksCommand command
+    ){
+        return command.execute(taskService);
+    }
+    public TaskResponse handle(
+            AddTaskCommand command
     ){
         return command.execute(taskService);
     }

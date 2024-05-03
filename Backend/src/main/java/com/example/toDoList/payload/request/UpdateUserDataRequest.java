@@ -1,6 +1,6 @@
-package com.example.toDoList.payload.reuqest;
+package com.example.toDoList.payload.request;
 
-public record UpdateUserDataReuqest(
+public record UpdateUserDataRequest(
         String password,
         String name,
         String surname,

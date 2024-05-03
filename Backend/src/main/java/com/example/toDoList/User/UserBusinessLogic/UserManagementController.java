@@ -6,8 +6,8 @@ import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.UserDeleteCommand;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;
-import com.example.toDoList.payload.reuqest.DeleteUserReuqest;
-import com.example.toDoList.payload.reuqest.UpdateUserDataReuqest;
+import com.example.toDoList.payload.request.DeleteUserRequest;
+import com.example.toDoList.payload.request.UpdateUserDataRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,7 @@ public class UserManagementController {
     @DeleteMapping("/delete")
     public ResponseEntity deleteUser(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-            @RequestBody DeleteUserReuqest reuqest
+            @RequestBody DeleteUserRequest reuqest
     ){
 
         Boolean response = fasada.handle(UserDeleteCommand.from(authorizationHeader,reuqest));
@@ -41,7 +41,7 @@ public class UserManagementController {
 
     @PutMapping("/update")
     public ResponseEntity updateUser(
-            @RequestBody UpdateUserDataReuqest reuqest,
+            @RequestBody UpdateUserDataRequest reuqest,
             HttpServletRequest request
     ){
         Long userId = (Long) request.getAttribute("id");

@@ -2,19 +2,19 @@ package com.example.toDoList.User.UserBusinessLogic.Command;
 
 import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
-import com.example.toDoList.payload.reuqest.DeleteUserReuqest;
+import com.example.toDoList.payload.request.DeleteUserRequest;
 
 
 public class UserDeleteCommand implements Command<Boolean, UserService> {
 
     private String authorizationHeader;
-    private DeleteUserReuqest reuqest;
+    private DeleteUserRequest reuqest;
 
-    private UserDeleteCommand(String authorizationHeader, DeleteUserReuqest reuqest){
+    private UserDeleteCommand(String authorizationHeader, DeleteUserRequest reuqest){
         this.authorizationHeader = authorizationHeader;
         this.reuqest = reuqest;
     }
-    public static UserDeleteCommand from(String authorizationHeader, DeleteUserReuqest reuqest){
+    public static UserDeleteCommand from(String authorizationHeader, DeleteUserRequest reuqest){
         return new UserDeleteCommand(authorizationHeader, reuqest);
     }
 

@@ -1,6 +1,6 @@
-package com.example.toDoList.payload.reuqest;
+package com.example.toDoList.payload.request;
 
-public record SignUpReuqest(
+public record SignUpRequest(
         String password,
         String name,
         String surname,
