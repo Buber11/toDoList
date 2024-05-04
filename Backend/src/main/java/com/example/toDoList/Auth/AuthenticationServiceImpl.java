@@ -72,7 +72,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
     public UserInfoResponse signup(SignUpRequest signUpDTO) {
 
-        UserInfoResponse addedUserDto;
+        UserInfoResponse response;
         User newUser;
 
         if(! userRepository.existsByEmail(signUpDTO.email())) {
@@ -87,23 +87,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             userRepository.save(newUser);
 
-            addedUserDto = UserInfoResponse.builder()
+            response = UserInfoResponse.builder()
                     .email(newUser.getEmail())
                     .name(newUser.getName())
                     .surname(newUser.getSurname())
                     .build();
 
-            if( ! (addedUserDto.name() == signUpDTO.name()
-                    && addedUserDto.email() == signUpDTO.email()
-                    && addedUserDto.surname() == signUpDTO.surname() ) ){
-                addedUserDto =null;
+            if( ! (response.name() == signUpDTO.name()
+                    && response.email() == signUpDTO.email()
+                    && response.surname() == signUpDTO.surname() ) ){
+                response =null;
             }
 
         }else {
-            addedUserDto = null;
+            response = null;
         }
 
-        return addedUserDto;
+        return response;
     }
 
     @Override
