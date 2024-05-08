@@ -36,7 +36,6 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeHttpRequests(e -> e
                         .requestMatchers("/api/auth/login","/api/auth/signup").permitAll()
-                        .requestMatchers(HttpMethod.DELETE,"/api/user/management/delete").authenticated()
                         .anyRequest().authenticated()
 
         );
@@ -45,9 +44,6 @@ public class SecurityConfiguration {
                         .addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
 
         httpSecurity.httpBasic(Customizer.withDefaults());
-
-        httpSecurity.sessionManagement( session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         httpSecurity.cors(cors -> corsConfigurationSource());
 
@@ -60,7 +56,7 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
+        configuration.setAllowedOrigins(List.of("http://localhost:5173/"));
         configuration.setAllowedMethods(List.of("GET","POST","DELETE"));
         configuration.setAllowedHeaders(List.of("Authorization","Content-Type"));
         configuration.setAllowCredentials(true);

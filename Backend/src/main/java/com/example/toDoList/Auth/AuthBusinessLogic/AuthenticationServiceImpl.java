@@ -1,5 +1,6 @@
-package com.example.toDoList.Auth;
+package com.example.toDoList.Auth.AuthBusinessLogic;
 
+import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationService;
 import com.example.toDoList.Auth.Token.Token;
 import com.example.toDoList.Auth.Token.TokenRespository;
 import com.example.toDoList.User.User;
@@ -11,6 +12,9 @@ import com.example.toDoList.payload.response.UserInfoResponse;
 
 import com.example.toDoList.User.UserRepository;
 import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -44,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.tokenRespository = tokenRespository;
     }
 
-    public JwtTokenInfoResponse authenticate(LoginRequest input) {
+    public Boolean authenticate(LoginRequest input, HttpServletResponse response) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -54,7 +58,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             );
         } catch (AuthenticationException e) {
             System.out.println("error authentication " + e.getMessage());
-            return null;
+            return false;
         }
 
         Optional<User> authenticatedUser = userRepository.findByEmail(input.email());
@@ -63,12 +67,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         extraClaims.put("userId", authenticatedUser.get().getUserId());
 
         String jwtToken = jwtService.generateToken(extraClaims,authenticatedUser.get());
-        JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
-                .token(jwtToken)
-                .expiresIn(jwtService.getExpirationTime())
-                .build();
+        Cookie cookie = new Cookie("jwt_token", jwtToken);
+        cookie.setMaxAge(5*3600);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
 
-        return jwtTokenInfoResponse;
+        return true;
     }
     public UserInfoResponse signup(SignUpRequest signUpDTO) {
 
@@ -136,24 +142,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public JwtTokenInfoResponse refreshToken(String authorizationHeader) {
+    public boolean refreshToken(String token, HttpServletResponse response) {
 
-        String token = jwtService.extractJwtToken(authorizationHeader);
         if(tokenRespository.existsByToken(token)){
-            return null;
+            return false;
         } else {
             String email = jwtService.extractUsernameFromToken(token);
             Optional<User> authenticatedUser = userRepository.findByEmail(email);
             if (userRepository.existsByEmail(email)){
-                System.out.println("weszło do jwt");
                 String jwtToken = jwtService.generateToken(authenticatedUser.get());
-                JwtTokenInfoResponse jwtTokenInfoResponse = JwtTokenInfoResponse.builder()
-                        .token(jwtToken)
-                        .expiresIn(jwtService.getExpirationTime())
-                        .build();
-                return jwtTokenInfoResponse;
+                Cookie cookie = new Cookie("jwt_token", jwtToken);
+                cookie.setMaxAge(5*3600);
+                cookie.setSecure(true);
+                cookie.setHttpOnly(true);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                return true;
             }else{
-                return null;
+                return false;
             }
         }
     }

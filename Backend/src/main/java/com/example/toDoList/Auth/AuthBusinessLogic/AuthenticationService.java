@@ -1,16 +1,18 @@
-package com.example.toDoList.Auth;
+package com.example.toDoList.Auth.AuthBusinessLogic;
 
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.request.SignUpRequest;
 import com.example.toDoList.payload.request.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseEntity;
 
 public interface AuthenticationService {
-    JwtTokenInfoResponse authenticate(LoginRequest input);
+    Boolean authenticate(LoginRequest input, HttpServletResponse response);
     UserInfoResponse signup(SignUpRequest signUpDTO);
 
     boolean logout(String authorizationHeader);
 
-    JwtTokenInfoResponse refreshToken(String authorizationHeader);
+    boolean refreshToken(String token, HttpServletResponse response);
 
 }

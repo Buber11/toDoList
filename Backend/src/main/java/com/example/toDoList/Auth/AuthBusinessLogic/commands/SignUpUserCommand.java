@@ -1,9 +1,9 @@
-package com.example.toDoList.Auth.commands;
+package com.example.toDoList.Auth.AuthBusinessLogic.commands;
 
 import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.payload.request.SignUpRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
-import com.example.toDoList.Auth.AuthenticationService;
+import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationService;
 
 
 public class SignUpUserCommand implements Command<UserInfoResponse, AuthenticationService> {

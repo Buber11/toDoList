@@ -1,6 +1,6 @@
-package com.example.toDoList.Auth.commands;
+package com.example.toDoList.Auth.AuthBusinessLogic.commands;
 
-import com.example.toDoList.Auth.AuthenticationService;
+import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationService;
 import com.example.toDoList.Fasada.Command;
 
 public class LogoutUserCommand implements Command<Boolean, AuthenticationService> {

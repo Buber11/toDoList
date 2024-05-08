@@ -1,6 +1,6 @@
 package com.example.toDoList.Fasada;
 
-import com.example.toDoList.Auth.AuthenticationServiceImpl;
+import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationServiceImpl;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.task.BusinessLogic.TaskService;
 import org.springframework.context.annotation.Bean;

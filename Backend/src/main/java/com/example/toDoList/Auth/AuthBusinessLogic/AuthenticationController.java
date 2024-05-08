@@ -1,14 +1,16 @@
-package com.example.toDoList.Auth;
+package com.example.toDoList.Auth.AuthBusinessLogic;
 
-import com.example.toDoList.Auth.commands.LoginUserCommand;
-import com.example.toDoList.Auth.commands.LogoutUserCommand;
-import com.example.toDoList.Auth.commands.RefreshTokenCommand;
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.LoginUserCommand;
+
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.LogoutUserCommand;
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.RefreshTokenCommand;
 import com.example.toDoList.Fasada.Fasada;
 import com.example.toDoList.payload.request.SignUpRequest;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.request.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
-import com.example.toDoList.Auth.commands.SignUpUserCommand;
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.SignUpUserCommand;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +40,15 @@ public class AuthenticationController {
         }
     }
     @PostMapping("/login")
-    public ResponseEntity<JwtTokenInfoResponse> authenticate(@RequestBody LoginRequest loginRequest) {
-        JwtTokenInfoResponse jwtTokenInfoResponse = fasada.handle(LoginUserCommand.from(loginRequest));
+    public ResponseEntity authenticate(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
-        if(jwtTokenInfoResponse == null){
-            return ResponseEntity.notFound().build();
+        boolean userLogin = fasada.handle(LoginUserCommand.from(loginRequest,response));
+        if(userLogin){
+            return ResponseEntity.ok().build();
         }else {
-            return ResponseEntity.ok(jwtTokenInfoResponse);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
     }
 
     @PostMapping("/logout")
@@ -61,12 +64,13 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<JwtTokenInfoResponse> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
-        JwtTokenInfoResponse jwtTokenInfoResponse = fasada.handle(RefreshTokenCommand.from(authorizationHeader));
-        if(jwtTokenInfoResponse != null){
-            return ResponseEntity.ok(jwtTokenInfoResponse);
+    public ResponseEntity refreshToken(@CookieValue("jwt_token") String token, HttpServletResponse response){
+        boolean refreshedToken = fasada.handle(RefreshTokenCommand.from(token,response));
+
+        if(refreshedToken){
+            return ResponseEntity.ok().build();
         }else {
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).build();
+            return ResponseEntity.status(401).build();
         }
     }
 

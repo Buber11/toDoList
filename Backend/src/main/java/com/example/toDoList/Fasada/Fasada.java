@@ -1,10 +1,10 @@
 package com.example.toDoList.Fasada;
 
 
-import com.example.toDoList.Auth.AuthenticationService;
-import com.example.toDoList.Auth.commands.LoginUserCommand;
-import com.example.toDoList.Auth.commands.LogoutUserCommand;
-import com.example.toDoList.Auth.commands.RefreshTokenCommand;
+import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationService;
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.LoginUserCommand;
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.LogoutUserCommand;
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.RefreshTokenCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.DeleteUserCommand;
@@ -12,13 +12,14 @@ import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.response.UserInfoResponse;
-import com.example.toDoList.Auth.commands.SignUpUserCommand;
+import com.example.toDoList.Auth.AuthBusinessLogic.commands.SignUpUserCommand;
 
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.task.BusinessLogic.TaskService;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class Fasada {
         return command.execute(authenticationService);
     }
 
-    public JwtTokenInfoResponse handle(
+    public Boolean handle(
             LoginUserCommand command
     ){
         return command.execute(authenticationService);
@@ -59,7 +60,7 @@ public class Fasada {
         return command.execute(authenticationService);
     }
 
-    public JwtTokenInfoResponse handle(
+    public boolean handle(
             RefreshTokenCommand command
     ){
         return command.execute(authenticationService);
