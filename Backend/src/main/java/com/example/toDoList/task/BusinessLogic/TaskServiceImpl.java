@@ -31,56 +31,24 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public List<TaskResponse> getAllTasksForUser(Long userId) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        if(! userOpt.isEmpty()){
-            var user = userOpt.get();
-            var tasks = user.getTasks();
-            var response = tasks.stream()
-                    .map( task -> {
-                        try {
-                            return TaskResponse.builder()
-                                    .taskId(aesCipher.encrypt(task.getTaskId().toString()))
-                                    .titleTask(task.getTitleTask())
-                                    .complited(task.getCompleted())
-                                    .build();
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-                    })
-                    .collect(Collectors.toCollection(LinkedList::new));
-
-            if(! response.isEmpty()){
-                return response;
-            }else {
-                return null;
-            }
-        }else {
-            return null;
-        }
-    }
-
-    @Override
     public TaskResponse addNewTask(Long userId, TaskRequest reuqest) {
-        if(userRepository.existsById(userId) ){
-            Task newTask = Task.builder()
-                    .userId(userId)
+
+        Task newTask = Task.builder()
+                    .listId(reuqest.listId())
                     .titleTask(reuqest.titleTask())
                     .completed(reuqest.completed())
                     .build();
-            taskRepository.save(newTask);
+        taskRepository.save(newTask);
 
-            try {
-                return TaskResponse.builder()
-                        .taskId(aesCipher.encrypt(newTask.getTaskId().toString()))
-                        .titleTask(newTask.getTitleTask())
-                        .complited(newTask.getCompleted())
-                        .build();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        }else {
-            return null;
+        try {
+            return TaskResponse.builder()
+                    .taskId(aesCipher.encrypt(newTask.getTaskId().toString()))
+                    .titleTask(newTask.getTitleTask())
+                    .complited(newTask.getCompleted())
+                    .build();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+
         }
 
     }
@@ -100,8 +68,8 @@ public class TaskServiceImpl implements TaskService{
         if(!taskOpt.isEmpty()){
             Task task = taskOpt.get();
 
+            //we use this in delete method to check if userId from token is the same like userId owner
             if(task.getUserId() == userId) {
-
                 taskRepository.delete(task);
                 return true;
             }

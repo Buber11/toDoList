@@ -13,6 +13,7 @@ import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.User.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -113,29 +114,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public boolean logout(String authorizationHeader) {
-
-        String token = jwtService.extractJwtToken(authorizationHeader);
-        String email = jwtService.extractUsernameFromToken(token);
+    public boolean logout(String token, HttpServletRequest request) {
+        Long userId = (long) request.getAttribute("id");
         Date expirationDate = jwtService.extractClaim(token, Claims :: getExpiration);
-
         if( ! expirationDate.before(new Date())){
-            Optional<User> userToLogout = userRepository.findByEmail(email);
 
-            if(! userToLogout.isEmpty()){
-                Token blackListToken = Token.builder()
-                        .userId(userToLogout.get().getUserId())
-                        .token(token)
-                        .tokenExpirationDate(expirationDate)
-                        .build();
+            Token blackListToken = Token.builder()
+                    .userId(userId)
+                    .token(token)
+                    .tokenExpirationDate(expirationDate)
+                    .build();
 
-                tokenRespository.save(blackListToken);
-                SecurityContextHolder.clearContext();
+            tokenRespository.save(blackListToken);
+            SecurityContextHolder.clearContext();
 
-                return true;
-            }else {
-                return false;
-            }
+            return true;
+
         }else {
             return false;
         }

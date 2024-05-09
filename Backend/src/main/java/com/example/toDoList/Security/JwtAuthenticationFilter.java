@@ -42,6 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
+        if ("/api/auth/login".equals(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         Cookie[] cookies = request.getCookies();
 
@@ -81,6 +85,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            response.setStatus(401);
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }

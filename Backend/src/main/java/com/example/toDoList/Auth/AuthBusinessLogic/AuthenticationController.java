@@ -10,6 +10,7 @@ import com.example.toDoList.payload.response.JwtTokenInfoResponse;
 import com.example.toDoList.payload.request.LoginRequest;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.SignUpUserCommand;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,18 +53,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader){
+    public ResponseEntity logout(@CookieValue("jwt_token") String token, HttpServletRequest request){
 
-        boolean response = fasada.handle(LogoutUserCommand.from(authorizationHeader));
-        if (response) {
+        boolean userLogout = fasada.handle(LogoutUserCommand.from(token,request));
+
+        if (userLogout) {
             return ResponseEntity.ok("Logout successful");
         } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Logout failed");
+            return ResponseEntity.status(401).build();
         }
 
     }
 
-    @PostMapping("/refresh-token")
+    @GetMapping("/refresh-token")
     public ResponseEntity refreshToken(@CookieValue("jwt_token") String token, HttpServletResponse response){
         boolean refreshedToken = fasada.handle(RefreshTokenCommand.from(token,response));
 

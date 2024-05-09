@@ -5,12 +5,10 @@ import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.request.TaskRequest;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
-import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriUtils;
 
 import java.util.List;
 
@@ -23,18 +21,9 @@ public class TaskController {
         this.fasada = fasada;
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity getAllTaskForUser(HttpServletRequest request){
-        Long userId = (Long) request.getAttribute("id");
-        List<TaskResponse> tasks = fasada.handle(GetTasksCommand.from(userId));
-        if(tasks != null){
-            return ResponseEntity.ok(tasks);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
-    }
     @PostMapping("/add")
     public ResponseEntity addNewTask(HttpServletRequest request, @RequestBody TaskRequest taskRequest){
+        System.out.println("we");
         Long userId = (Long) request.getAttribute("id");
         TaskResponse response = fasada.handle(AddTaskCommand.from(userId, taskRequest));
         if(response != null){
@@ -54,4 +43,6 @@ public class TaskController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
 }

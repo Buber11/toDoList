@@ -23,8 +23,13 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private Long taskId;
+
+    //we use this in delete method to check if userId from token is the same like userId owner
     @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "list_id")
+    private Long listId;
 
     @Column(name = "task_title")
     private String titleTask;

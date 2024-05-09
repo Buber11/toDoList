@@ -1,13 +1,12 @@
 package com.example.toDoList.User;
 
-import com.example.toDoList.task.Task;
+import com.example.toDoList.List.TaskList;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class User implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "user_id")
-    private List<Task> tasks = new LinkedList<>();
+    private List<TaskList> taskLists = new LinkedList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

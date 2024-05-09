@@ -1,6 +1,7 @@
 package com.example.toDoList.Fasada;
 
 import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationServiceImpl;
+import com.example.toDoList.List.businessLogic.ListService;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.task.BusinessLogic.TaskService;
 import org.springframework.context.annotation.Bean;
@@ -13,9 +14,10 @@ public class FasadaConfig {
     public Fasada setFasada(
             AuthenticationServiceImpl authenticationService,
             UserService userService,
-            TaskService taskService
+            TaskService taskService,
+            ListService listService
     ){
-        return new Fasada(authenticationService, userService, taskService);
+        return new Fasada(authenticationService, userService, taskService,listService);
     }
 
 }

@@ -5,11 +5,13 @@ import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationService;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.LoginUserCommand;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.RefreshTokenCommand;
+import com.example.toDoList.List.businessLogic.Command.GetListCommand;
+import com.example.toDoList.List.businessLogic.ListService;
 import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.DeleteUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
-import com.example.toDoList.payload.response.JwtTokenInfoResponse;
+import com.example.toDoList.payload.response.ListResponse;
 import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.SignUpUserCommand;
@@ -18,8 +20,6 @@ import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.task.BusinessLogic.TaskService;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
-import com.example.toDoList.task.BusinessLogic.command.GetTasksCommand;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -36,10 +36,13 @@ public class Fasada {
 
     private TaskService taskService;
 
-    public Fasada(AuthenticationService authenticationService, UserService userService, TaskService taskService) {
+    private ListService listService;
+
+    public Fasada(AuthenticationService authenticationService, UserService userService, TaskService taskService, ListService listService) {
         this.authenticationService = authenticationService;
         this.userService = userService;
         this.taskService = taskService;
+        this.listService = listService;
     }
 
     public UserInfoResponse handle(
@@ -84,11 +87,6 @@ public class Fasada {
         return command.execute(userService);
     }
 
-    public List<TaskResponse> handle(
-            GetTasksCommand command
-    ){
-        return command.execute(taskService);
-    }
     public TaskResponse handle(
             AddTaskCommand command
     ){
@@ -98,6 +96,11 @@ public class Fasada {
             DeleteTaskCommand command
     ){
         return command.execute(taskService);
+    }
+    public ListResponse handle(
+            GetListCommand command
+    ){
+        return command.execute(listService);
     }
 
 

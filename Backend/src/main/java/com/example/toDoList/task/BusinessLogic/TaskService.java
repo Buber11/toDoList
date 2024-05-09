@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface TaskService {
 
-    public List<TaskResponse> getAllTasksForUser(Long userId);
     public TaskResponse addNewTask(Long userId, TaskRequest reuqest);
     public Boolean deleteTask(Long userId, String taskIdEncrypted);
 
