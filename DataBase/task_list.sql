@@ -1,0 +1,6 @@
+CREATE TABLE task_list (
+    list_id SERIAL PRIMARY KEY,
+    list_title VARCHAR(255) NOT NULL,
+    user_id BIGINT NOT NULL,
+    timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

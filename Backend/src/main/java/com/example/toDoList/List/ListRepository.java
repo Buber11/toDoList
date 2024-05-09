@@ -9,4 +9,5 @@ import java.util.List;
 public interface ListRepository extends JpaRepository<TaskList,Long> {
 
     List<TaskList> findAllByUserId(long userId);
+    boolean existsByListIdAndUserId(long listId, long userId);
 }

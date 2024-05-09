@@ -32,8 +32,7 @@ public class User implements UserDetails {
     private String password;
     private boolean enabled = true;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "userId",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskList> taskLists = new LinkedList<>();
 
     @Override

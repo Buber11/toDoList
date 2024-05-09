@@ -5,6 +5,7 @@ import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationService;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.LoginUserCommand;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.RefreshTokenCommand;
+import com.example.toDoList.List.businessLogic.Command.DeleteListCommand;
 import com.example.toDoList.List.businessLogic.Command.GetListCommand;
 import com.example.toDoList.List.businessLogic.ListService;
 import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
@@ -99,6 +100,11 @@ public class Fasada {
     }
     public ListResponse handle(
             GetListCommand command
+    ){
+        return command.execute(listService);
+    }
+    public Boolean handle(
+            DeleteListCommand command
     ){
         return command.execute(listService);
     }

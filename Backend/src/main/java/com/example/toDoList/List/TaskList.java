@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "list")
+@Table(name = "task_list")
 public class TaskList {
     
     @Id
@@ -24,8 +24,7 @@ public class TaskList {
     @Column(name = "list_title")
     private String listTitle;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "list_id")
+    @OneToMany( mappedBy = "listId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new LinkedList<>();
     
     @Column(name = "user_id")

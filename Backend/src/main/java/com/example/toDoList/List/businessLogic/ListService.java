@@ -10,5 +10,7 @@ public interface ListService {
 
     ListResponse getLists(HttpServletRequest request);
 
+    boolean deleteList(ListRequest request, HttpServletRequest httpRequest);
+
 
 }
