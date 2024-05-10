@@ -2,9 +2,10 @@ package com.example.toDoList.List.businessLogic;
 
 import com.example.toDoList.List.ListRepository;
 import com.example.toDoList.List.TaskList;
-import com.example.toDoList.payload.request.ListRequest;
+import com.example.toDoList.payload.request.AddListRequest;
+import com.example.toDoList.payload.request.ChangeTitleListRequest;
+import com.example.toDoList.payload.request.DeleteListRequest;
 import com.example.toDoList.payload.response.ListResponse;
-import com.example.toDoList.task.Task;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +31,36 @@ public class ListServiceImpl implements ListService{
     }
 
     @Override
-    public boolean deleteList(ListRequest request, HttpServletRequest httpRequest) {
+    public boolean deleteList(DeleteListRequest request, HttpServletRequest httpRequest) {
         Long userId = (long) httpRequest.getAttribute("id");
         if(listRepository.existsByListIdAndUserId(request.listId(), userId)){
             Optional<TaskList> list = listRepository.findById(request.listId());
             listRepository.delete(list.get());
             return true;
         } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void addList(AddListRequest request, HttpServletRequest requestHttp) {
+        long userId = (long) requestHttp.getAttribute("id");
+
+        listRepository.save(TaskList.builder()
+                .listTitle(request.listTitle())
+                .userId(userId)
+                .build()
+        );
+
+    }
+
+    @Override
+    public boolean upDateListTitle(ChangeTitleListRequest request, HttpServletRequest requestHttp) {
+        long userId = (long) requestHttp.getAttribute("id");
+        if(listRepository.existsByListIdAndUserId(request.listId(), userId)){
+            listRepository.setListTitleById(request.listTitle(),request.listId());
+            return true;
+        }else {
             return false;
         }
     }

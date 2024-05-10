@@ -5,8 +5,10 @@ import com.example.toDoList.Auth.AuthBusinessLogic.AuthenticationService;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.LoginUserCommand;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.LogoutUserCommand;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.RefreshTokenCommand;
+import com.example.toDoList.List.businessLogic.Command.AddListCommand;
 import com.example.toDoList.List.businessLogic.Command.DeleteListCommand;
 import com.example.toDoList.List.businessLogic.Command.GetListCommand;
+import com.example.toDoList.List.businessLogic.Command.UpDateTitleListCommand;
 import com.example.toDoList.List.businessLogic.ListService;
 import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
@@ -108,6 +110,15 @@ public class Fasada {
     ){
         return command.execute(listService);
     }
+    public void handle(
+            AddListCommand command
+    ){
+        command.execute(listService);
+    }
 
-
+    public boolean handle(
+            UpDateTitleListCommand command
+    ){
+        return command.execute(listService);
+    }
 }

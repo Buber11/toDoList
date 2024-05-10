@@ -1,9 +1,13 @@
 package com.example.toDoList.List.businessLogic;
 
 import com.example.toDoList.Fasada.Fasada;
+import com.example.toDoList.List.businessLogic.Command.AddListCommand;
 import com.example.toDoList.List.businessLogic.Command.DeleteListCommand;
 import com.example.toDoList.List.businessLogic.Command.GetListCommand;
-import com.example.toDoList.payload.request.ListRequest;
+import com.example.toDoList.List.businessLogic.Command.UpDateTitleListCommand;
+import com.example.toDoList.payload.request.AddListRequest;
+import com.example.toDoList.payload.request.ChangeTitleListRequest;
+import com.example.toDoList.payload.request.DeleteListRequest;
 import com.example.toDoList.payload.response.ListResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +30,26 @@ public class ListController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteList(@RequestBody ListRequest request, HttpServletRequest httpRequest){
+    public ResponseEntity deleteList(@RequestBody DeleteListRequest request, HttpServletRequest httpRequest){
         boolean listDeleted = fasada.handle(DeleteListCommand.from(request,httpRequest));
         if(listDeleted){
             return ResponseEntity.noContent().build();
+        }else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity addList(@RequestBody AddListRequest request, HttpServletRequest requestHttp){
+        fasada.handle(AddListCommand.from(requestHttp,request));
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/change-title")
+    public ResponseEntity changeTitle(@RequestBody ChangeTitleListRequest request, HttpServletRequest requestHttp){
+        boolean changedTitleList = fasada.handle(UpDateTitleListCommand.from(requestHttp,request));
+        if(changedTitleList){
+            return ResponseEntity.ok().build();
         }else {
             return ResponseEntity.badRequest().build();
         }

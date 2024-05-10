@@ -1,6 +1,7 @@
 package com.example.toDoList.payload.request;
 
-public record ListRequest(
+public record ChangeTitleListRequest(
+        String listTitle,
         Long listId
 ) {
 }
