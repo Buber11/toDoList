@@ -34,8 +34,7 @@ public class TaskController {
     @DeleteMapping("/delete")
     public ResponseEntity deleteTask(@RequestParam("taskId") long taskId, HttpServletRequest requestHttp){
         boolean response = fasada.handle(DeleteTaskCommand.from(requestHttp,taskId));
-        System.out.println("weszło");
-        System.out.println(response);
+
         if(response){
             return ResponseEntity.ok().build();
         }else {
