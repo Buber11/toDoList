@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface TaskRepository extends JpaRepository<Task,Long> {
 
+    boolean existsByTaskIdAndUserId(long taskId, long userId);
+
 }
 

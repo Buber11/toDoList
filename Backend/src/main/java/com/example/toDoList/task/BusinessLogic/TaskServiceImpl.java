@@ -6,6 +6,8 @@ import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.request.TaskRequest;
 import com.example.toDoList.task.Task;
 import com.example.toDoList.task.TaskRepository;
+import com.sun.net.httpserver.HttpsServer;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -27,7 +29,8 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public TaskResponse addNewTask(Long userId, TaskRequest reuqest) {
+    public TaskResponse addNewTask(HttpServletRequest requestHttp, TaskRequest reuqest) {
+        long userId = (long) requestHttp.getAttribute("id");
         Task newTask = Task.builder()
                     .listId(reuqest.listId())
                     .taskTitle(reuqest.taskTitle())
@@ -38,7 +41,7 @@ public class TaskServiceImpl implements TaskService{
 
         try {
             return TaskResponse.builder()
-                    .taskId(aesCipher.encrypt(newTask.getTaskId().toString()))
+                    .taskId(newTask.getTaskId())
                     .titleTask(newTask.getTaskTitle())
                     .complited(newTask.getCompleted())
                     .build();
@@ -50,27 +53,11 @@ public class TaskServiceImpl implements TaskService{
     }
 
     @Override
-    public Boolean deleteTask(Long userId, String taskIdEncrypted) {
-        Long taskId;
-
-        try {
-            taskId = Long.decode(aesCipher.decrypt(taskIdEncrypted));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        Optional<Task> taskOpt = taskRepository.findById(taskId);
-
-        if(!taskOpt.isEmpty()){
-            Task task = taskOpt.get();
-
-            //we use this in delete method to check if userId from token is the same like userId owner
-            if(task.getUserId() == userId) {
-                taskRepository.delete(task);
-                return true;
-            }
-            else return false;
-
+    public Boolean deleteTask(long taskId, HttpServletRequest request) {
+        long userId = (long) request.getAttribute("id");
+        if(taskRepository.existsByTaskIdAndUserId(taskId,userId)) {
+            taskRepository.deleteById(taskId);
+            return true;
         }else {
             return false;
         }

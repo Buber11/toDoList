@@ -1,4 +1,5 @@
 'use strict';
+
 const PageContainer = document.getElementById('container');
 const select = document.getElementById('select');
 
@@ -39,7 +40,7 @@ const  processData = (taskLists) => {
 
         PageContainer.appendChild(list.listDiv)
         taskList.tasks.forEach(task => {
-            const taskObj = new Task(list);
+            const taskObj = new Task(list, task.taskId);
             taskObj.createNewTask(task.taskTitle);
             list.addNewTask(taskObj)
             if(task.completed == true ){
@@ -207,7 +208,8 @@ class List {
 
 class Task{
 
-    constructor(list){
+    constructor(list,id){
+        this.id = id;
         this.listElement = document.createElement("li");
         this.taskContent = document.createElement('p');
         this.removeTaskButton = document.createElement('button');
@@ -250,6 +252,7 @@ class Task{
     
 }
 
+
 const  openModalToRemoveTask = (task, taskContent) => {
     const modalOverlay = document.getElementById('modal-overlay');
     const modal = document.getElementById('modal');
@@ -262,10 +265,14 @@ const  openModalToRemoveTask = (task, taskContent) => {
     
     modalText.innerText = "Are you sure to remove task: " + taskContent + "?";
 
-    confirmDeleteButton.addEventListener('click', function() {
+    const deleteTask = (task) =>{
         task.remove();
+        deleteTaskFromDataBase(task.id);
         closeModal();
-    });
+    }
+
+    confirmDeleteButton.removeEventListener('click', deleteTask);
+    confirmDeleteButton.onclick = () => deleteTask(task);
   
     cancelDeleteButton.addEventListener('click', function() {
       closeModal();
@@ -275,9 +282,35 @@ const  openModalToRemoveTask = (task, taskContent) => {
       modalOverlay.style.display = 'none';
       modal.style.display = 'none';
     }
+
 }
 
-const  openModalToRemoveList = (list, listTitle) => {
+const deleteTaskFromDataBase = (taskId) => {
+    return new Promise((resolve, reject) => {
+        fetch(`http://localhost:8080/api/task/delete?taskId=${taskId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('An error occurred while deleting the task to the database.');
+            }
+            console.log('The task has been deleted from the database.');
+            resolve(); 
+        })
+        .catch(error => {
+            console.error('An error occurred:', error);
+            reject(error); 
+        });
+    });
+};
+
+
+
+const openModalToRemoveList = (list, listTitle) => {
     const modalOverlay = document.getElementById('modal-overlay');
     const modal = document.getElementById('modal');
     const confirmDeleteButton = document.getElementById('confirm-delete');
@@ -286,52 +319,131 @@ const  openModalToRemoveList = (list, listTitle) => {
 
     modalOverlay.style.display = 'block';
     modal.style.display = 'block';
-    
     modalText.innerText = "Are you sure to remove list: " + listTitle + "?";
 
-    confirmDeleteButton.addEventListener('click', function() {
-        
-        list.listDiv.classList.remove('fade-in');
-        list.listDiv.classList.add('fade-out');
-
-        setTimeout(function() {
-            list.option.remove();
-            allList.splice(allList.indexOf(this),1);
-            list.listDiv.remove();
-        }, 1000);
-
+    const confirmDeleteList = async (list) =>{
         deleteListFromDataBase(list.id);
+        removeListFromUI(list);
+        closeModal();
+    }
 
+    confirmDeleteButton.removeEventListener('click', confirmDeleteList);
+
+    confirmDeleteButton.onclick = () => confirmDeleteList(list);
+
+    cancelDeleteButton.addEventListener('click', function() {
         closeModal();
     });
-  
-    cancelDeleteButton.addEventListener('click', function() {
-      closeModal();
-    });
-  
+
     function closeModal() {
-      modalOverlay.style.display = 'none';
-      modal.style.display = 'none';
+        modalOverlay.style.display = 'none';
+        modal.style.display = 'none';
+    }
+
+    
+}
+
+const deleteListFromDataBase = async (listId) => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/list/delete/${listId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('An error occurred while deleting the list from the database.');
+        }
+
+        console.log('The list has been deleted from the database.');
+    } catch (error) {
+        console.error('An error occurred:', error);
+        throw error;
     }
 }
+
+const removeListFromUI = async (list) => {
+    try {
+        list.listDiv.classList.remove('fade-in');
+        list.listDiv.classList.add('fade-out');
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for animation
+
+        list.option.remove();
+        allList.splice(allList.indexOf(list), 1);
+        list.listDiv.remove();
+    } catch (error) {
+        console.error('An error occurred while removing the list from UI:', error);
+        throw error;
+    }
+}
+
+
 const input = document.getElementById('input');
 
 
-const add = () => {
+const addTask = () => {
     const value = input.value;
     if (value.trim() !== '') { 
-        const list = allList.find( list => list.option.textContent === select.value );
+        const list = findListByOptionValue(select.value);
 
-        const task = new Task(list);
-        task.createNewTask(value);
+        const task = createNewTask(list, value);
 
-        list.addNewTask(task);
+        addTaskToDatabase(list.id, task.taskContent.textContent)
+            .then(taskId => {
+                task.id = taskId;
+                console.log('Task added successfully. Task ID:', taskId);
+            })
+            .catch(error => {
+                console.error('Error occurred while adding the task:', error);
+            });
 
         input.value = ''; 
     }
-
 };
 
+const findListByOptionValue = (optionValue) => {
+    return allList.find(list => list.option.textContent === optionValue);
+};
+
+const createNewTask = (list, taskTitle) => {
+    const task = new Task(list);
+    task.createNewTask(taskTitle);
+    list.addNewTask(task);
+    return task;
+};
+
+const addTaskToDatabase = async (listId, taskTitle) => {
+    const data = {
+        listId: listId,
+        completed: false,
+        taskTitle: taskTitle
+    };
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/task/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error('An error occurred while adding the task to the database.');
+        }
+
+        console.log('The task has been added to the database.');
+        const responseData = await response.json();
+        return responseData.taskId;
+
+    } catch (error) {
+        console.error('An error occurred:', error);
+        throw error; 
+    }
+};
 
 
 const addNewList = () => {
@@ -339,35 +451,15 @@ const addNewList = () => {
     list.createNewList();
     PageContainer.appendChild(list.listDiv);
     
-    (async () => {
-        try {
-            list.id = await addListToDataBase();
-        } catch (error) {
+    return addListToDataBase()
+        .then(listId => {
+            list.id = listId;
+            console.log('List added successfully. List ID:', listId);
+        })
+        .catch(error => {
             console.error('Error occurred while adding the list:', error);
-        }
-    })();
-
+        });
 };
-
-const deleteListFromDataBase = async (ListId) => {
-    fetch(`http://localhost:8080/api/list/delete/${ListId}`, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('An error occurred while deleting the list from the database.');
-        }
-        
-        console.log('The list has been deleted from the database.');
-    })
-    .catch(error => {
-        console.error('An error occurred:', error);
-    });
-}
 
 const addListToDataBase = async () => {
     const data = {
@@ -392,9 +484,10 @@ const addListToDataBase = async () => {
         return responseData.listId;
     } catch (error) {
         console.error('An error occurred:', error);
-        throw error; // Rzuć błąd, aby obsłużyć go na wyższym poziomie
+        throw error; 
     }
 };
+
 
 const changeListTitleDataBase = (listId, newlistTitle ) =>{
 
@@ -422,5 +515,7 @@ const changeListTitleDataBase = (listId, newlistTitle ) =>{
         console.error('An error occurred:', error);
     });
 }
+
+
 
 

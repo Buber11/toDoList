@@ -22,9 +22,8 @@ public class TaskController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addNewTask(HttpServletRequest request, @RequestBody TaskRequest taskRequest){
-        Long userId = (Long) request.getAttribute("id");
-        TaskResponse response = fasada.handle(AddTaskCommand.from(userId, taskRequest));
+    public ResponseEntity addNewTask(HttpServletRequest requestHttp, @RequestBody TaskRequest taskRequest){
+        TaskResponse response = fasada.handle(AddTaskCommand.from(requestHttp, taskRequest));
         if(response != null){
             return ResponseEntity.ok(response);
         }else {
@@ -33,14 +32,16 @@ public class TaskController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteTask(@RequestParam String taskId, HttpServletRequest request){
-        Long userId = (Long) request.getAttribute("id");
-        boolean response = fasada.handle(DeleteTaskCommand.from(userId,taskId));
+    public ResponseEntity deleteTask(@RequestParam("taskId") long taskId, HttpServletRequest requestHttp){
+        boolean response = fasada.handle(DeleteTaskCommand.from(requestHttp,taskId));
+        System.out.println("weszło");
+        System.out.println(response);
         if(response){
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         }else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
+
     }
 
 

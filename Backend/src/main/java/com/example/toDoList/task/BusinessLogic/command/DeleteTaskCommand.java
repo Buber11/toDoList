@@ -2,22 +2,24 @@ package com.example.toDoList.task.BusinessLogic.command;
 
 import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.task.BusinessLogic.TaskService;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class DeleteTaskCommand implements Command<Boolean, TaskService> {
 
-    private long userId;
-    private String taskId;
+    private HttpServletRequest requestHttp;
+    private long taskId;
 
-    private DeleteTaskCommand(long userId, String taskId) {
-        this.userId = userId;
+    public DeleteTaskCommand(HttpServletRequest requestHttp, long taskId) {
+        this.requestHttp = requestHttp;
         this.taskId = taskId;
     }
-    public static DeleteTaskCommand from(long userId, String taskId){
-        return new DeleteTaskCommand(userId, taskId);
+
+    public static DeleteTaskCommand from(HttpServletRequest requestHttp, long taskId){
+        return new DeleteTaskCommand(requestHttp, taskId);
     }
 
     @Override
     public Boolean execute(TaskService taskService) {
-        return taskService.deleteTask(userId,taskId);
+        return taskService.deleteTask(taskId, requestHttp);
     }
 }

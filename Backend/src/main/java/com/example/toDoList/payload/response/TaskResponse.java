@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record TaskResponse(
-        String taskId,
+        long taskId,
         String titleTask,
         Boolean complited
 
