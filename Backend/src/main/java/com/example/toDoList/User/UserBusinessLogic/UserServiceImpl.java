@@ -7,6 +7,7 @@ import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.payload.request.DeleteUserRequest;
 import com.example.toDoList.payload.request.UpdateUserDataRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -38,32 +39,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Boolean deleteUser(String authorizationHeader, DeleteUserRequest reuqest) {
-        String token = jwtService.extractJwtToken(authorizationHeader);
-        String email = jwtService.extractUsernameFromToken(token);
-
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            email,
-                            reuqest.password()
-                    )
-            );
-        } catch (AuthenticationException e) {
-            System.out.println("error authentication " + e.getMessage());
-            return false;
-        }
-
-        Long userId = jwtService.extractIdFromToken(token);
-
+    public void deleteUser(HttpServletRequest httpServletRequest) {
+        long userId = (long) httpServletRequest.getAttribute("id");
         userRepository.deleteById(userId);
-        return true;
-
     }
 
     @Override
-    public UserUpdateResponse updateUserData(UpdateUserDataRequest reuqest, Long userId) {
-
+    public UserUpdateResponse updateUserData(UpdateUserDataRequest reuqest, HttpServletRequest httpServletRequest) {
+        long userId = (long) httpServletRequest.getAttribute("id");
         if(userRepository.existsById(userId)){
             User updatedUser = User.builder()
                     .userId(userId)
@@ -94,8 +77,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserInfoResponse getInfoAboutUser(Long userId) {
-
+    public UserInfoResponse getInfoAboutUser(HttpServletRequest httpServletRequest) {
+        long userId = (long) httpServletRequest.getAttribute("id");
         Optional<User> userToView = userRepository.findById(userId);
 
         if(! userToView.isEmpty()){

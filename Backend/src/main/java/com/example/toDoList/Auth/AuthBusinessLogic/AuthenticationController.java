@@ -24,15 +24,14 @@ public class AuthenticationController {
 
     private final Fasada fasada;
 
-    public AuthenticationController(Fasada fasada,
-                                    AuthenticationServiceImpl authenticationService) {
+    public AuthenticationController(Fasada fasada) {
         this.fasada = fasada;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserInfoResponse> register(@RequestBody SignUpRequest signUpDTO) {
+    public ResponseEntity<UserInfoResponse> register(@RequestBody SignUpRequest request) {
 
-        UserInfoResponse createdUserDto = fasada.handle(SignUpUserCommand.from(signUpDTO));
+        UserInfoResponse createdUserDto = fasada.handle(SignUpUserCommand.from(request));
 
         if(createdUserDto != null) {
             return ResponseEntity.ok(createdUserDto);

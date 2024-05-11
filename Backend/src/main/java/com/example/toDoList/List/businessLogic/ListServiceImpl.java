@@ -32,7 +32,7 @@ public class ListServiceImpl implements ListService{
     }
 
     @Override
-    public boolean deleteList( Long listId, HttpServletRequest httpRequest) {
+    public boolean deleteList( long listId, HttpServletRequest httpRequest) {
         Long userId = (long) httpRequest.getAttribute("id");
         if(listRepository.existsByListIdAndUserId(listId, userId)){
             Optional<TaskList> list = listRepository.findById(listId);

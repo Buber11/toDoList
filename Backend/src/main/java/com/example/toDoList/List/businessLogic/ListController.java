@@ -32,7 +32,7 @@ public class ListController {
     }
 
     @DeleteMapping("/delete/{listId}")
-    public ResponseEntity deleteList(@PathVariable Long listId, HttpServletRequest httpRequest){
+    public ResponseEntity deleteList(@PathVariable long listId, HttpServletRequest httpRequest){
         boolean listDeleted = fasada.handle(DeleteListCommand.from(listId,httpRequest));
         if(listDeleted){
             return ResponseEntity.ok().build();

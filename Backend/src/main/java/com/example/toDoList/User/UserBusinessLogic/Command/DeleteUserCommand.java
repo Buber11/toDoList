@@ -3,23 +3,24 @@ package com.example.toDoList.User.UserBusinessLogic.Command;
 import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.payload.request.DeleteUserRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 
-public class DeleteUserCommand implements Command<Boolean, UserService> {
+public class DeleteUserCommand implements Command<Void, UserService> {
 
-    private String authorizationHeader;
-    private DeleteUserRequest reuqest;
+    private final HttpServletRequest httpServletRequest;
 
-    private DeleteUserCommand(String authorizationHeader, DeleteUserRequest reuqest){
-        this.authorizationHeader = authorizationHeader;
-        this.reuqest = reuqest;
+    public DeleteUserCommand(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
     }
-    public static DeleteUserCommand from(String authorizationHeader, DeleteUserRequest reuqest){
-        return new DeleteUserCommand(authorizationHeader, reuqest);
+
+    public static DeleteUserCommand from(HttpServletRequest httpServletRequest){
+        return new DeleteUserCommand(httpServletRequest);
     }
 
     @Override
-    public Boolean execute(UserService userService) {
-        return userService.deleteUser(authorizationHeader, reuqest);
+    public Void execute(UserService userService) {
+        userService.deleteUser(httpServletRequest);
+        return null;
     }
 }

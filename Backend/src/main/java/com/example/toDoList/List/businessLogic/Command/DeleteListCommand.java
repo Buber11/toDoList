@@ -8,15 +8,15 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class DeleteListCommand implements Command<Boolean, ListService> {
 
-    private Long listId;
-    private HttpServletRequest httpRequest;
+    private final long listId;
+    private final HttpServletRequest httpRequest;
 
-    private DeleteListCommand( Long listId, HttpServletRequest httpRequest) {
+    private DeleteListCommand( long listId, HttpServletRequest httpRequest) {
         this.listId = listId;
         this.httpRequest = httpRequest;
     }
 
-    public static DeleteListCommand from( Long listId, HttpServletRequest httpRequest){
+    public static DeleteListCommand from( long listId, HttpServletRequest httpRequest){
         return new DeleteListCommand(listId,httpRequest);
     }
 

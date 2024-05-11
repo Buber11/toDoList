@@ -3,20 +3,21 @@ package com.example.toDoList.User.UserBusinessLogic.Command;
 import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.payload.response.UserInfoResponse;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class GetUserCommand implements Command<UserInfoResponse, UserService> {
 
-    private Long userId;
+    private final HttpServletRequest httpServletRequest
 
-    private GetUserCommand(Long userId) {
-        this.userId = userId;
+    private GetUserCommand(HttpServletRequest httpServletRequest) {
+        this.httpServletRequest = httpServletRequest;
     }
 
-    public static GetUserCommand from(Long userId){
-        return new GetUserCommand(userId);
+    public static GetUserCommand from(HttpServletRequest httpServletRequest){
+        return new GetUserCommand(httpServletRequest);
     }
     @Override
     public UserInfoResponse execute(UserService userService) {
-        return userService.getInfoAboutUser(userId);
+        return userService.getInfoAboutUser(httpServletRequest);
     }
 }

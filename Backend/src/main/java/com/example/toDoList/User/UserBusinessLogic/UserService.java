@@ -4,13 +4,14 @@ import com.example.toDoList.payload.response.UserInfoResponse;
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.payload.request.DeleteUserRequest;
 import com.example.toDoList.payload.request.UpdateUserDataRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public interface UserService {
 
-    Boolean deleteUser(String authorizationHeader, DeleteUserRequest reuqest);
-    UserUpdateResponse updateUserData(UpdateUserDataRequest reuqest, Long userId);
+    void deleteUser(HttpServletRequest httpServletRequest);
+    UserUpdateResponse updateUserData(UpdateUserDataRequest reuqest, HttpServletRequest httpServletRequest);
 
-    UserInfoResponse getInfoAboutUser(Long userId);
+    UserInfoResponse getInfoAboutUser(HttpServletRequest httpServletRequest);
 
 
 }

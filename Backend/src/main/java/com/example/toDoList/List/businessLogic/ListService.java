@@ -11,7 +11,7 @@ public interface ListService {
 
     ListResponse getLists(HttpServletRequest request);
 
-    boolean deleteList( Long listId, HttpServletRequest httpRequest);
+    boolean deleteList( long listId, HttpServletRequest httpRequest);
 
     ListIdResponce addList(AddListRequest request, HttpServletRequest requestHttp);
     boolean upDateListTitle(ChangeTitleListRequest request, HttpServletRequest requestHttp);

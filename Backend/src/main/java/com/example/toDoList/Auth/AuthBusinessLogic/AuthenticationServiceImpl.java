@@ -69,7 +69,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String jwtToken = jwtService.generateToken(extraClaims,authenticatedUser.get());
         Cookie cookie = new Cookie("jwt_token", jwtToken);
-        cookie.setMaxAge(5*3600);
+        cookie.setMaxAge(2*3600);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
@@ -146,7 +146,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if (userRepository.existsByEmail(email)){
                 String jwtToken = jwtService.generateToken(authenticatedUser.get());
                 Cookie cookie = new Cookie("jwt_token", jwtToken);
-                cookie.setMaxAge(5*3600);
+                cookie.setMaxAge(2*3600);
                 cookie.setSecure(true);
                 cookie.setHttpOnly(true);
                 cookie.setPath("/");

@@ -3,7 +3,7 @@ package com.example.toDoList.payload.request;
 public record TaskRequest(
         String taskTitle,
 
-        Long listId,
+        long listId,
 
         Boolean completed
 ) {

@@ -26,26 +26,22 @@ public class UserManagementController {
 
     @DeleteMapping("/delete")
     public ResponseEntity deleteUser(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader,
-            @RequestBody DeleteUserRequest reuqest
+            HttpServletRequest httpServletRequest
     ){
 
-        Boolean response = fasada.handle(DeleteUserCommand.from(authorizationHeader,reuqest));
+        fasada.handle(DeleteUserCommand.from(httpServletRequest));
 
-        if(response){
-            return ResponseEntity.status(HttpStatus.ACCEPTED).build();
-        }else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+
     }
 
     @PutMapping("/update")
     public ResponseEntity updateUser(
             @RequestBody UpdateUserDataRequest reuqest,
-            HttpServletRequest request
+            HttpServletRequest httpServletRequest
     ){
-        Long userId = (Long) request.getAttribute("id");
-        UserUpdateResponse response = fasada.handle(UpdateUserCommand.from(reuqest,userId));
+
+        UserUpdateResponse response = fasada.handle(UpdateUserCommand.from(reuqest,httpServletRequest));
 
         if(response != null){
             return ResponseEntity.ok(response);
@@ -56,9 +52,8 @@ public class UserManagementController {
     }
 
     @GetMapping("/getInfo")
-    public ResponseEntity getInfoAboutUser(HttpServletRequest request){
-        Long userId = (Long) request.getAttribute("id");
-        UserInfoResponse response = fasada.handle(GetUserCommand.from(userId));
+    public ResponseEntity getInfoAboutUser(HttpServletRequest httpServletRequest){
+        UserInfoResponse response = fasada.handle(GetUserCommand.from(httpServletRequest));
         if(response != null){
             return ResponseEntity.ok(response);
         }else {

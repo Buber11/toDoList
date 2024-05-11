@@ -4,23 +4,24 @@ import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
 import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.payload.request.UpdateUserDataRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 public class UpdateUserCommand implements Command<UserUpdateResponse, UserService> {
 
-    private UpdateUserDataRequest reuqest;
-    private Long userId;
+    private final UpdateUserDataRequest reuqest;
+    private final HttpServletRequest httpServletRequest;
 
-    private UpdateUserCommand(UpdateUserDataRequest reuqest, Long userId) {
+    public UpdateUserCommand(UpdateUserDataRequest reuqest, HttpServletRequest httpServletRequest) {
         this.reuqest = reuqest;
-        this.userId = userId;
+        this.httpServletRequest = httpServletRequest;
     }
 
-    public static UpdateUserCommand from(UpdateUserDataRequest reuqest, Long userId){
-        return new UpdateUserCommand(reuqest,userId);
+    public static UpdateUserCommand from(UpdateUserDataRequest reuqest, HttpServletRequest httpServletRequest){
+        return new UpdateUserCommand(reuqest,httpServletRequest);
     }
 
     @Override
     public UserUpdateResponse execute(UserService userService) {
-        return userService.updateUserData(reuqest, userId);
+        return userService.updateUserData(reuqest, httpServletRequest);
     }
 }

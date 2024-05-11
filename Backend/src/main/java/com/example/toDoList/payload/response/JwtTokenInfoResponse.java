@@ -5,7 +5,7 @@ import lombok.Builder;
 @Builder
 public record JwtTokenInfoResponse(
     String token,
-    Long expiresIn
+    long expiresIn
 
 ){}
 
