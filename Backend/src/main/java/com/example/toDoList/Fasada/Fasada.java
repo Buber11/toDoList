@@ -14,12 +14,9 @@ import com.example.toDoList.User.UserBusinessLogic.Command.GetUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.UpdateUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.Command.DeleteUserCommand;
 import com.example.toDoList.User.UserBusinessLogic.UserService;
-import com.example.toDoList.payload.response.ListResponse;
-import com.example.toDoList.payload.response.TaskResponse;
-import com.example.toDoList.payload.response.UserInfoResponse;
+import com.example.toDoList.payload.response.*;
 import com.example.toDoList.Auth.AuthBusinessLogic.commands.SignUpUserCommand;
 
-import com.example.toDoList.payload.response.UserUpdateResponse;
 import com.example.toDoList.task.BusinessLogic.TaskService;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
@@ -110,10 +107,10 @@ public class Fasada {
     ){
         return command.execute(listService);
     }
-    public void handle(
+    public ListIdResponce handle(
             AddListCommand command
     ){
-        command.execute(listService);
+       return command.execute(listService);
     }
 
     public boolean handle(

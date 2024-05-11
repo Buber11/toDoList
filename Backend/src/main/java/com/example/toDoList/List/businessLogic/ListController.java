@@ -8,6 +8,7 @@ import com.example.toDoList.List.businessLogic.Command.UpDateTitleListCommand;
 import com.example.toDoList.payload.request.AddListRequest;
 import com.example.toDoList.payload.request.ChangeTitleListRequest;
 import com.example.toDoList.payload.request.DeleteListRequest;
+import com.example.toDoList.payload.response.ListIdResponce;
 import com.example.toDoList.payload.response.ListResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -30,11 +31,11 @@ public class ListController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity deleteList(@RequestBody DeleteListRequest request, HttpServletRequest httpRequest){
-        boolean listDeleted = fasada.handle(DeleteListCommand.from(request,httpRequest));
+    @DeleteMapping("/delete/{listId}")
+    public ResponseEntity deleteList(@PathVariable Long listId, HttpServletRequest httpRequest){
+        boolean listDeleted = fasada.handle(DeleteListCommand.from(listId,httpRequest));
         if(listDeleted){
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         }else {
             return ResponseEntity.badRequest().build();
         }
@@ -42,8 +43,8 @@ public class ListController {
 
     @PostMapping("/add")
     public ResponseEntity addList(@RequestBody AddListRequest request, HttpServletRequest requestHttp){
-        fasada.handle(AddListCommand.from(requestHttp,request));
-        return ResponseEntity.ok().build();
+        ListIdResponce responce = fasada.handle(AddListCommand.from(requestHttp,request));
+        return ResponseEntity.ok(responce);
     }
 
     @PutMapping("/change-title")

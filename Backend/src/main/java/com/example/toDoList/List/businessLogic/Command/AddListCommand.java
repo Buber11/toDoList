@@ -3,9 +3,10 @@ package com.example.toDoList.List.businessLogic.Command;
 import com.example.toDoList.Fasada.Command;
 import com.example.toDoList.List.businessLogic.ListService;
 import com.example.toDoList.payload.request.AddListRequest;
+import com.example.toDoList.payload.response.ListIdResponce;
 import jakarta.servlet.http.HttpServletRequest;
 
-public class AddListCommand implements Command<Void, ListService> {
+public class AddListCommand implements Command<ListIdResponce, ListService> {
 
     private final HttpServletRequest requestHttp;
     private final AddListRequest  request;
@@ -19,8 +20,7 @@ public class AddListCommand implements Command<Void, ListService> {
     }
 
     @Override
-    public Void execute(ListService listService) {
-        listService.addList(request,requestHttp);
-        return null;
+    public ListIdResponce execute(ListService listService) {
+        return listService.addList(request,requestHttp);
     }
 }

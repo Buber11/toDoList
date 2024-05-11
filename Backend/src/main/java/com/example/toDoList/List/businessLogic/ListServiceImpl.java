@@ -5,6 +5,7 @@ import com.example.toDoList.List.TaskList;
 import com.example.toDoList.payload.request.AddListRequest;
 import com.example.toDoList.payload.request.ChangeTitleListRequest;
 import com.example.toDoList.payload.request.DeleteListRequest;
+import com.example.toDoList.payload.response.ListIdResponce;
 import com.example.toDoList.payload.response.ListResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -31,10 +32,10 @@ public class ListServiceImpl implements ListService{
     }
 
     @Override
-    public boolean deleteList(DeleteListRequest request, HttpServletRequest httpRequest) {
+    public boolean deleteList( Long listId, HttpServletRequest httpRequest) {
         Long userId = (long) httpRequest.getAttribute("id");
-        if(listRepository.existsByListIdAndUserId(request.listId(), userId)){
-            Optional<TaskList> list = listRepository.findById(request.listId());
+        if(listRepository.existsByListIdAndUserId(listId, userId)){
+            Optional<TaskList> list = listRepository.findById(listId);
             listRepository.delete(list.get());
             return true;
         } else {
@@ -43,14 +44,17 @@ public class ListServiceImpl implements ListService{
     }
 
     @Override
-    public void addList(AddListRequest request, HttpServletRequest requestHttp) {
+    public ListIdResponce addList(AddListRequest request, HttpServletRequest requestHttp) {
         long userId = (long) requestHttp.getAttribute("id");
 
-        listRepository.save(TaskList.builder()
+        TaskList list = listRepository.save(TaskList.builder()
                 .listTitle(request.listTitle())
                 .userId(userId)
                 .build()
         );
+
+
+        return new ListIdResponce(list.getListId());
 
     }
 

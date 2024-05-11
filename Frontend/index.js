@@ -30,8 +30,8 @@ window.onload = async () => {
 
 const  processData = (taskLists) => {
     taskLists.forEach(taskList => {
-        const list = new List();
-        list.createNewList(),
+        const list = new List(taskList.listId);
+        list.createNewList();
         list.inputListName.value = taskList.listTitle;
 
         list.option.innerText = taskList.listTitle;
@@ -53,10 +53,10 @@ const allList = [];
 let lastRemovedList; 
 
 class List {
-    static nextId = 1;
+    
 
-    constructor(){
-        this.id = List.nextId++;
+    constructor(id){
+        this.id = id;
         this.option = document.createElement('option');
         allList.push(this);
         this.taskList = [];
@@ -82,6 +82,9 @@ class List {
 
         //update select option
         this.inputListName.addEventListener('blur', () =>{
+
+            changeListTitleDataBase(this.id, this.inputListName.value); 
+
             this.option.innerText = this.inputListName.value;
             if(this.option.textContent !== ""){
                 select.appendChild(this.option);
@@ -287,6 +290,7 @@ const  openModalToRemoveList = (list, listTitle) => {
     modalText.innerText = "Are you sure to remove list: " + listTitle + "?";
 
     confirmDeleteButton.addEventListener('click', function() {
+        
         list.listDiv.classList.remove('fade-in');
         list.listDiv.classList.add('fade-out');
 
@@ -295,6 +299,8 @@ const  openModalToRemoveList = (list, listTitle) => {
             allList.splice(allList.indexOf(this),1);
             list.listDiv.remove();
         }, 1000);
+
+        deleteListFromDataBase(list.id);
 
         closeModal();
     });
@@ -332,7 +338,89 @@ const addNewList = () => {
     const list = new List();
     list.createNewList();
     PageContainer.appendChild(list.listDiv);
+    
+    (async () => {
+        try {
+            list.id = await addListToDataBase();
+        } catch (error) {
+            console.error('Error occurred while adding the list:', error);
+        }
+    })();
+
 };
 
+const deleteListFromDataBase = async (ListId) => {
+    fetch(`http://localhost:8080/api/list/delete/${ListId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('An error occurred while deleting the list from the database.');
+        }
+        
+        console.log('The list has been deleted from the database.');
+    })
+    .catch(error => {
+        console.error('An error occurred:', error);
+    });
+}
+
+const addListToDataBase = async () => {
+    const data = {
+        listTitle: 'without name'
+    };
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/list/add`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error('An error occurred while adding the list to the database.');
+        }
+
+        const responseData = await response.json();
+        return responseData.listId;
+    } catch (error) {
+        console.error('An error occurred:', error);
+        throw error; // Rzuć błąd, aby obsłużyć go na wyższym poziomie
+    }
+};
+
+const changeListTitleDataBase = (listId, newlistTitle ) =>{
+
+    const data = {
+        listTitle: newlistTitle,
+        listId: listId
+    }
+
+    fetch(`http://localhost:8080/api/list/change-title`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('An error occurred while renaming the list to the database.');
+        }
+        
+        console.log('The list has been renamed in the database.');
+    })
+    .catch(error => {
+        console.error('An error occurred:', error);
+    });
+}
 
 
