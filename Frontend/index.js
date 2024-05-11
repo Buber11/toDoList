@@ -1,9 +1,55 @@
 'use strict';
+const PageContainer = document.getElementById('container');
+const select = document.getElementById('select');
 
+window.onload = async () => {
 
+    try {
+        const response = await fetch('http://localhost:8080/api/list/get', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+                
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('Wystąpił błąd podczas pobierania danych.');
+        }
+
+        const data = await response.json();
+        console.log(data); 
+        processData(data.taskLists);
+        
+    } catch (error) {
+        console.error('Wystąpił błąd:', error);
+    }
+
+}
+
+const  processData = (taskLists) => {
+    taskLists.forEach(taskList => {
+        const list = new List();
+        list.createNewList(),
+        list.inputListName.value = taskList.listTitle;
+
+        list.option.innerText = taskList.listTitle;
+        select.appendChild(list.option);
+
+        PageContainer.appendChild(list.listDiv)
+        taskList.tasks.forEach(task => {
+            const taskObj = new Task(list);
+            taskObj.createNewTask(task.taskTitle);
+            list.addNewTask(taskObj)
+            if(task.completed == true ){
+                taskObj.complete();
+            }
+        });
+    });
+}
 
 const allList = [];
-const select = document.getElementById('select');
 let lastRemovedList; 
 
 class List {
@@ -25,7 +71,7 @@ class List {
 
         this.listDiv = document.createElement("div");
 
-        this.completedTaskList;
+        this.completedTaskList = null;
         
     }
 
@@ -147,7 +193,7 @@ class List {
 
     hideCompletedTaskList(){
 
-        if(this.completedTaskList.listTaskContainer.childElementCount === 1){
+        if( this.complitedTaskList != null && this.completedTaskList.listTaskContainer.childElementCount === 1){
             this.completedTaskList.inputWithButton.classList.add('hidden');
             this.completedTaskList.listTaskContainer.classList.add('hidden');
         }
@@ -280,7 +326,7 @@ const add = () => {
 
 };
 
-const PageContainer = document.getElementById('container');
+
 
 const addNewList = () => {
     const list = new List();

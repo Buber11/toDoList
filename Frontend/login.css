@@ -1,0 +1,67 @@
+:root {
+    --background-body-color: white;
+    --blue-border-colour: #007bff;
+    --text-color: black;
+    --radius-px: 20px;
+    --padding-more: 20px;
+}
+
+body {
+    background-color: var(--background-body-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+#loginForm {
+    background-color: white;
+    padding: var(--padding-more);
+    border-radius: var(--radius-px);
+    box-shadow: var(--box-shadow-blue);
+    width: 400px; /* zmiana szerokości formularza */
+}
+
+label {
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid var(--blue-border-colour);
+    border-radius: var(--radius-px);
+    box-sizing: border-box;
+    transition: var(--box-shadow-transition);
+}
+
+input[type="email"]:hover,
+input[type="password"]:hover {
+    box-shadow: var(--box-shadow-blue);
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    box-shadow: var(--box-shadow-blue);
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: var(--radius-px);
+    background-color: var(--blue-border-colour);
+    color: white;
+    cursor: pointer;
+    transition: var(--box-shadow-transition);
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}

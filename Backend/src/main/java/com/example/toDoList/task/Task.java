@@ -1,11 +1,7 @@
 package com.example.toDoList.task;
 
-import com.example.toDoList.User.User;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.Fetch;
 import lombok.*;
 
 import java.util.Date;
@@ -32,7 +28,7 @@ public class Task {
     private Long listId;
 
     @Column(name = "task_title")
-    private String titleTask;
+    private String taskTitle;
 
     private Boolean completed;
 

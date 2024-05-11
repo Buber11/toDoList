@@ -12,9 +12,8 @@ public interface ListRepository extends JpaRepository<TaskList,Long> {
 
     List<TaskList> findAllByUserId(long userId);
     boolean existsByListIdAndUserId(long listId, long userId);
-
     @Modifying
-    @Query("UPDATE TaskList l set l.listTitle = ?1 Where l.listId = ?2")
+    @Query(value = "update TaskList l set l.listTitle =?1 where l.listId =?2")
     void setListTitleById(String listTitle, long listId );
 
 }

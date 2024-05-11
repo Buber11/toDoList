@@ -25,6 +25,7 @@ public class ListController {
 
     @GetMapping("/get")
     public ResponseEntity getLists(HttpServletRequest request){
+
         ListResponse response = fasada.handle(GetListCommand.from(request));
         return ResponseEntity.ok(response);
     }
@@ -48,6 +49,7 @@ public class ListController {
     @PutMapping("/change-title")
     public ResponseEntity changeTitle(@RequestBody ChangeTitleListRequest request, HttpServletRequest requestHttp){
         boolean changedTitleList = fasada.handle(UpDateTitleListCommand.from(requestHttp,request));
+
         if(changedTitleList){
             return ResponseEntity.ok().build();
         }else {

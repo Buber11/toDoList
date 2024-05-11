@@ -1,7 +1,6 @@
 package com.example.toDoList.task.BusinessLogic;
 
 import com.example.toDoList.Security.AESCipher;
-import com.example.toDoList.User.User;
 import com.example.toDoList.User.UserRepository;
 import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.request.TaskRequest;
@@ -10,10 +9,7 @@ import com.example.toDoList.task.TaskRepository;
 import org.springframework.stereotype.Service;
 
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService{
@@ -32,10 +28,10 @@ public class TaskServiceImpl implements TaskService{
 
     @Override
     public TaskResponse addNewTask(Long userId, TaskRequest reuqest) {
-
         Task newTask = Task.builder()
                     .listId(reuqest.listId())
-                    .titleTask(reuqest.titleTask())
+                    .taskTitle(reuqest.taskTitle())
+                    .userId(userId)
                     .completed(reuqest.completed())
                     .build();
         taskRepository.save(newTask);
@@ -43,7 +39,7 @@ public class TaskServiceImpl implements TaskService{
         try {
             return TaskResponse.builder()
                     .taskId(aesCipher.encrypt(newTask.getTaskId().toString()))
-                    .titleTask(newTask.getTitleTask())
+                    .titleTask(newTask.getTaskTitle())
                     .complited(newTask.getCompleted())
                     .build();
         } catch (Exception e) {

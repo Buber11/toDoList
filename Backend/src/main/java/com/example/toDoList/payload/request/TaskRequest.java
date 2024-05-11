@@ -1,7 +1,7 @@
 package com.example.toDoList.payload.request;
 
 public record TaskRequest(
-        String titleTask,
+        String taskTitle,
 
         Long listId,
 

@@ -23,7 +23,6 @@ public class TaskController {
 
     @PostMapping("/add")
     public ResponseEntity addNewTask(HttpServletRequest request, @RequestBody TaskRequest taskRequest){
-        System.out.println("we");
         Long userId = (Long) request.getAttribute("id");
         TaskResponse response = fasada.handle(AddTaskCommand.from(userId, taskRequest));
         if(response != null){

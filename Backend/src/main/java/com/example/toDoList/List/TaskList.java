@@ -1,6 +1,7 @@
 package com.example.toDoList.List;
 
 import com.example.toDoList.task.Task;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +27,8 @@ public class TaskList {
     
     @OneToMany( mappedBy = "listId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new LinkedList<>();
-    
+
+    @JsonIgnore
     @Column(name = "user_id")
     private Long userId;
 

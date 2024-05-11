@@ -7,6 +7,7 @@ import com.example.toDoList.payload.request.ChangeTitleListRequest;
 import com.example.toDoList.payload.request.DeleteListRequest;
 import com.example.toDoList.payload.response.ListResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,7 +26,6 @@ public class ListServiceImpl implements ListService{
     public ListResponse getLists(HttpServletRequest request) {
         Long userId = (Long) request.getAttribute("id");
         List<TaskList> taskLists = listRepository.findAllByUserId(userId);
-        System.out.println(taskLists);
         ListResponse response = new  ListResponse(taskLists);
         return response;
     }
@@ -55,6 +55,7 @@ public class ListServiceImpl implements ListService{
     }
 
     @Override
+    @Transactional
     public boolean upDateListTitle(ChangeTitleListRequest request, HttpServletRequest requestHttp) {
         long userId = (long) requestHttp.getAttribute("id");
         if(listRepository.existsByListIdAndUserId(request.listId(), userId)){
