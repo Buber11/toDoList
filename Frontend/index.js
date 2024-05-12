@@ -1,5 +1,23 @@
 'use strict';
 
+const refreshToken = setInterval( async function() {
+    try {
+        const response = await fetch('http://localhost:8080/api/auth/refresh-token', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            throw new Error('token has not been refreshed');
+        }
+    } catch (error) {
+        console.error('error occur', error);
+    }
+}, 60000); 
+
 const PageContainer = document.getElementById('container');
 const select = document.getElementById('select');
 
@@ -20,13 +38,11 @@ window.onload = async () => {
         }
 
         const data = await response.json();
-        console.log(data); 
         processData(data.taskLists);
         
     } catch (error) {
         console.error('Wystąpił błąd:', error);
     }
-
 }
 
 const  processData = (taskLists) => {
@@ -37,7 +53,12 @@ const  processData = (taskLists) => {
 
         list.option.innerText = taskList.listTitle;
         select.appendChild(list.option);
-
+        
+        if(localStorage.getItem(taskList.listId) !== null){
+            list.listTaskContainer.classList.add('hidden');
+            list.hideListButton.innerText='Show';
+        }
+        
         PageContainer.appendChild(list.listDiv)
         taskList.tasks.forEach(task => {
             const taskObj = new Task(list, task.taskId);
@@ -47,6 +68,7 @@ const  processData = (taskLists) => {
                 taskObj.complete();
             }
         });
+
     });
 }
 
@@ -100,9 +122,11 @@ class List {
         //implementation of hidding list
         this.hideListButton.addEventListener('click', () =>{
             if(this.listTaskContainer.classList.contains('hidden')){
+                localStorage.removeItem(this.id);
                 this.listTaskContainer.classList.remove('hidden');
                 this.hideListButton.innerHTML = "Hide";
             }else {
+                localStorage.setItem(this.id,'hidden');
                 this.listTaskContainer.classList.add('hidden');
                 this.hideListButton.innerHTML = "Show";
             }
@@ -152,17 +176,17 @@ class List {
     addCompletedTaskList(list){
 
         list.removeListButton.remove();
-        list.inputListName.value = "Complited Task";
+        list.inputListName.value = "Completed Task";
         list.inputListName.disabled = true;
+        list.listTaskContainer.classList.add('hidden');
+        list.hideListButton.innerText = 'Show';
         this.completedTaskList = list;
         this.listDiv.appendChild(list.inputWithButton);
         this.listDiv.appendChild(list.listTaskContainer);
-
     }
 
     backUpTaskToList(task){
         this.addNewTask(task);
-    
         this.hideCompletedTaskList();
 
     }
@@ -184,7 +208,7 @@ class List {
             this.addCompletedTaskList(complitedTaskList);
         }else{
             this.completedTaskList.inputWithButton.classList.remove('hidden');
-            this.completedTaskList.listTaskContainer.classList.remove('hidden');
+            this.completedTaskList.hideListButton.innerText='Show';
         }
         
         this.completedTaskList.addNewTask(task);
@@ -197,7 +221,7 @@ class List {
 
     hideCompletedTaskList(){
 
-        if( this.complitedTaskList != null && this.completedTaskList.listTaskContainer.childElementCount === 1){
+        if( this.complitedTaskList !== null && this.completedTaskList.listTaskContainer.childElementCount === 1){
             this.completedTaskList.inputWithButton.classList.add('hidden');
             this.completedTaskList.listTaskContainer.classList.add('hidden');
         }
@@ -223,6 +247,9 @@ class Task{
         this.taskContent.innerText = taskContentText;
     
         this.taskContent.addEventListener('click', this.complete.bind(this));
+        this.taskContent.addEventListener('click', () =>{
+            completeTaskDataBase(this.id);
+        })
     
         this.removeTaskButton.innerText = "X"; 
         this.removeTaskButton.classList.add("removeTaskButton");
@@ -251,6 +278,30 @@ class Task{
     }
     
 }
+
+const completeTaskDataBase = (taskId) => {
+    return new Promise((resolve, reject) => {
+        fetch(`http://localhost:8080/api/task/complete?id=${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('An error occurred while completing the task to the database.');
+            }
+            console.log('The task has been completed.');
+            resolve(); 
+        })
+        .catch(error => {
+            console.error('An error occurred:', error);
+            reject(error); 
+        });
+    });
+};
+
 
 
 const  openModalToRemoveTask = (task, taskContent) => {
@@ -515,7 +566,5 @@ const changeListTitleDataBase = (listId, newlistTitle ) =>{
         console.error('An error occurred:', error);
     });
 }
-
-
 
 

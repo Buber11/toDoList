@@ -9,7 +9,7 @@ body {
     padding: 0;
 }
 
-#loginForm {
+#registrationForm {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -24,6 +24,7 @@ label {
     font-weight: bold;
 }
 
+input[type="text"],
 input[type="email"],
 input[type="password"] {
     width: calc(100% - 10px); 
@@ -35,13 +36,14 @@ input[type="password"] {
     transition: border-color 0.3s ease; 
 }
 
+input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus {
     outline: none;
     border-color: #007bff; 
 }
 
-button {
+button[type="submit"] {
     width: 100%;
     padding: 10px;
     border: none;
@@ -52,18 +54,6 @@ button {
     transition: background-color 0.3s ease; 
 }
 
-button:hover {
+button[type="submit"]:hover {
     background-color: #0056b3;
 }
-
-.registration-link {
-    background-color: transparent;
-    color: black;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    transition: color 0.3s ease; 
-}
-

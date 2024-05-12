@@ -6,7 +6,6 @@ function loginUser(email, password) {
         password: password
     };
 
-    
     fetch('http://localhost:8080/api/auth/login', {
         method: 'POST',
         headers: {
@@ -33,8 +32,8 @@ function loginUser(email, password) {
 document.getElementById('loginForm').addEventListener('submit', function(event) {
     event.preventDefault(); 
 
-    var email = document.getElementById('email').value;
-    var password = document.getElementById('password').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
     loginUser(email, password);
 });
