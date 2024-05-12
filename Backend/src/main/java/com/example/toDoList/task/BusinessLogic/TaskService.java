@@ -11,5 +11,6 @@ public interface TaskService {
 
     public TaskResponse addNewTask(HttpServletRequest requestHttp, TaskRequest reuqest);
     public Boolean deleteTask(long userId, HttpServletRequest requestHttp);
+    public boolean completeTask(long taskId);
 
 }

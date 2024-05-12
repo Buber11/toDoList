@@ -40,9 +40,7 @@ public class UserManagementController {
             @RequestBody UpdateUserDataRequest reuqest,
             HttpServletRequest httpServletRequest
     ){
-
         UserUpdateResponse response = fasada.handle(UpdateUserCommand.from(reuqest,httpServletRequest));
-
         if(response != null){
             return ResponseEntity.ok(response);
         }else {

@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class GetUserCommand implements Command<UserInfoResponse, UserService> {
 
-    private final HttpServletRequest httpServletRequest
+    private final HttpServletRequest httpServletRequest;
 
     private GetUserCommand(HttpServletRequest httpServletRequest) {
         this.httpServletRequest = httpServletRequest;

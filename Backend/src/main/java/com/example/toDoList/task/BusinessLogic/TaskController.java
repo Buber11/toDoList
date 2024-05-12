@@ -4,6 +4,7 @@ import com.example.toDoList.Fasada.Fasada;
 import com.example.toDoList.payload.response.TaskResponse;
 import com.example.toDoList.payload.request.TaskRequest;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
+import com.example.toDoList.task.BusinessLogic.command.CompleteTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,15 @@ public class TaskController {
             return ResponseEntity.badRequest().build();
         }
 
+    }
+    @PutMapping("/complete")
+    public ResponseEntity complete(@RequestParam(name = "id")long taskId){
+        var completedTask = fasada.handle(CompleteTaskCommand.from(taskId));
+        if(completedTask){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.noContent().build();
+        }
     }
 
 

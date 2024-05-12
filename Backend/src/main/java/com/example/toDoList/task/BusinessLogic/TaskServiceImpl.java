@@ -39,16 +39,12 @@ public class TaskServiceImpl implements TaskService{
                     .build();
         taskRepository.save(newTask);
 
-        try {
-            return TaskResponse.builder()
+
+        return TaskResponse.builder()
                     .taskId(newTask.getTaskId())
                     .titleTask(newTask.getTaskTitle())
                     .complited(newTask.getCompleted())
                     .build();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-
-        }
 
     }
 
@@ -57,6 +53,23 @@ public class TaskServiceImpl implements TaskService{
         long userId = (long) request.getAttribute("id");
         if(taskRepository.existsByTaskIdAndUserId(taskId,userId)) {
             taskRepository.deleteById(taskId);
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean completeTask(long taskId) {
+        Optional<Task> taskOpt = taskRepository.findById(taskId);
+        if(taskOpt.isPresent()){
+            Task task = taskOpt.get();
+            if(task.getCompleted()){
+                task.setCompleted(false);
+            }else {
+                task.setCompleted(true);
+            }
+            taskRepository.save(task);
             return true;
         }else {
             return false;

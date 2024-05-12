@@ -19,6 +19,7 @@ import com.example.toDoList.Auth.AuthBusinessLogic.commands.SignUpUserCommand;
 
 import com.example.toDoList.task.BusinessLogic.TaskService;
 import com.example.toDoList.task.BusinessLogic.command.AddTaskCommand;
+import com.example.toDoList.task.BusinessLogic.command.CompleteTaskCommand;
 import com.example.toDoList.task.BusinessLogic.command.DeleteTaskCommand;
 
 import java.util.List;
@@ -69,10 +70,10 @@ public class Fasada {
         return command.execute(authenticationService);
     }
 
-    public boolean handle(
+    public void handle(
             DeleteUserCommand command
     ){
-        return command.execute(userService);
+        command.execute(userService);
     }
 
     public UserUpdateResponse handle(
@@ -117,5 +118,10 @@ public class Fasada {
             UpDateTitleListCommand command
     ){
         return command.execute(listService);
+    }
+    public boolean handle(
+            CompleteTaskCommand command
+    ){
+        return command.execute(taskService);
     }
 }
