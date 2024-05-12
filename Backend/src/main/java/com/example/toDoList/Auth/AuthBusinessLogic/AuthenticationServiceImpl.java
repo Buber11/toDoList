@@ -144,13 +144,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String email = jwtService.extractUsernameFromToken(token);
             Optional<User> authenticatedUser = userRepository.findByEmail(email);
             if (userRepository.existsByEmail(email)){
-                String jwtToken = jwtService.generateToken(authenticatedUser.get());
+
+                HashMap extraClaims = new HashMap();
+                extraClaims.put("userId", authenticatedUser.get().getUserId());
+
+                String jwtToken = jwtService.generateToken(extraClaims,authenticatedUser.get());
                 Cookie cookie = new Cookie("jwt_token", jwtToken);
                 cookie.setMaxAge(2*3600);
                 cookie.setSecure(true);
                 cookie.setHttpOnly(true);
                 cookie.setPath("/");
                 response.addCookie(cookie);
+
                 return true;
             }else{
                 return false;
